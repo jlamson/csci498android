@@ -6,7 +6,7 @@ public class Restaurant {
 	private String type = "";
 	
 	public String getName() 	{ return name; }
-	public String getAddress()	{ return address;}
+	public String getAddress()	{ return address; }
 	public String getType()		{ return type; }
 	
 	public void setName(String name)
@@ -15,4 +15,9 @@ public class Restaurant {
 		{ this.address = address; }
 	public void setType(String type)
 		{ this.type = type; }
+
+	@Override
+	public String toString() {
+		return getName();
+	}
 }
