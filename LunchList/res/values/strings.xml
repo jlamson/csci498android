@@ -4,5 +4,8 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_lunch_list">LunchList</string>
-
+    <string name="name_label">Name:</string>
+	<string name="address_label">Address:</string>
+	<string name="save_button_label">Save</string>
+	
 </resources>
