@@ -23,7 +23,7 @@
 	        <TextView
 	            android:textColor="#ff0000"
 	            android:text="@string/address_label" />
-	        <EditText
+	        <AutoCompleteTextView
 	            android:inputType="text"
 	            android:id="@+id/addr"
 	            android:textStyle="italic" />

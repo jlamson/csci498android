@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -15,7 +16,10 @@ import android.widget.RadioGroup;
 
 public class LunchList extends Activity {
 	List<Restaurant> restaurants = new ArrayList<Restaurant>();
-	ArrayAdapter<Restaurant> restaurant_adapter = null;
+	ArrayAdapter<Restaurant> restaurantAdapter = null;
+	
+	List<String> previousAddresses = new ArrayList<String>();
+	ArrayAdapter<String> addressAdapter = null;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,17 +32,24 @@ public class LunchList extends Activity {
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
         
-        ListView restaurant_listview = (ListView)findViewById(R.id.restaurants);
-        restaurant_adapter = new ArrayAdapter<Restaurant>(	this,
-        										android.R.layout.simple_list_item_1,
-        										restaurants);
-        restaurant_listview.setAdapter(restaurant_adapter);
+        ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
+        restaurantAdapter = new ArrayAdapter<Restaurant>( 	this,
+        													android.R.layout.simple_list_item_1,
+        													restaurants);
+        restaurantListview.setAdapter(restaurantAdapter);
+        
+        AutoCompleteTextView addressField = (AutoCompleteTextView)findViewById(R.id.addr);
+        addressAdapter = new ArrayAdapter<String>(	this,
+        											android.R.layout.simple_dropdown_item_1line,
+        											previousAddresses);
+        addressField.setAdapter(addressAdapter);
         
     }
 
 	private View.OnClickListener onSave = new View.OnClickListener() {
 		public void onClick(View v) {
 			Restaurant restaurant = new Restaurant();
+			
 			EditText name = (EditText)findViewById(R.id.name);
 			EditText address = (EditText)findViewById(R.id.addr);
 			RadioGroup types = (RadioGroup)findViewById(R.id.types);
@@ -58,7 +69,8 @@ public class LunchList extends Activity {
 				break;
 			}
 			
-			restaurant_adapter.add(restaurant);
+			restaurantAdapter.add(restaurant);
+			addressAdapter.add(address.getText().toString());
 		}
 	};
 
