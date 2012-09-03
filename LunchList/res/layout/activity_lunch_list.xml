@@ -11,9 +11,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#0000ff"
             android:text="@string/name_label" />
         <EditText
             android:id="@+id/name"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -24,9 +26,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="#ff0000"
             android:text="@string/address_label" />
         <EditText
             android:id="@+id/addr"
+            android:textStyle="italic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
