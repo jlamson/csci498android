@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,14 +103,14 @@ public class LunchList extends Activity {
 			if(row==null) {
 				LayoutInflater inflater = getLayoutInflater();
 				
-				row = inflater.inflate(R.layout.row, null);
+				row = inflater.inflate(R.layout.row_d, null);
 				holder = new RestaurantHolder(row);
 				row.setTag(holder);
 			} else {
 				holder = (RestaurantHolder)row.getTag();
 			}
 			
-			holder.populateFrom(restaurants.get(position));
+			holder.populateFrom(restaurants.get(position), LunchList.this);
 			
 			return row;
 		}
@@ -126,16 +127,19 @@ public class LunchList extends Activity {
 			icon =		(ImageView)row.findViewById(R.id.icon);
 		}
 		
-		public void populateFrom(Restaurant r) {
+		public void populateFrom(Restaurant r, Context ll) {
 			name.setText(r.getName());
 			address.setText(r.getAddress());
 			
 			if(r.getType().equals("sit_down")) {
 				icon.setImageResource(R.drawable.ball_red);
+				name.setTextColor(ll.getResources().getColor(R.color.red));
 			} else if(r.getType().equals("take_out")) {
 				icon.setImageResource(R.drawable.ball_yellow);
+				name.setTextColor(ll.getResources().getColor(R.color.yellow));
 			} else {
 				icon.setImageResource(R.drawable.ball_green);
+				name.setTextColor(ll.getResources().getColor(R.color.green));
 			}
 		}
 	}
