@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -27,11 +28,19 @@ public class LunchList extends TabActivity {
 	List<String> previousAddresses = new ArrayList<String>();
 	ArrayAdapter<String> addressAdapter = null;
 	
+	EditText name = null;
+    EditText address = null;
+    RadioGroup types = null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lunch_list);
         
+        name = (EditText)findViewById(R.id.name);
+		address = (EditText)findViewById(R.id.addr);
+		types = (RadioGroup)findViewById(R.id.types);
+		
         //E.C for APT4
         //addSurplusRadioButtons();
         
@@ -41,6 +50,7 @@ public class LunchList extends TabActivity {
         ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
         restaurantAdapter = new RestaurantAdapter();
         restaurantListview.setAdapter(restaurantAdapter);
+        restaurantListview.setOnItemClickListener(onListClick);
         
         AutoCompleteTextView addressField = (AutoCompleteTextView)findViewById(R.id.addr);
         addressAdapter = new ArrayAdapter<String>(	this,
@@ -59,15 +69,17 @@ public class LunchList extends TabActivity {
         getTabHost().addTab(spec);
         
         getTabHost().setCurrentTab(0);
+        
+        
     }
 
 	private View.OnClickListener onSave = new View.OnClickListener() {
 		public void onClick(View v) {
 			Restaurant restaurant = new Restaurant();
 			
-			EditText name = (EditText)findViewById(R.id.name);
-			EditText address = (EditText)findViewById(R.id.addr);
-			RadioGroup types = (RadioGroup)findViewById(R.id.types);
+			name = (EditText)findViewById(R.id.name);
+			address = (EditText)findViewById(R.id.addr);
+			types = (RadioGroup)findViewById(R.id.types);
 			
 			restaurant.setName(name.getText().toString());
 			restaurant.setAddress(address.getText().toString());
@@ -155,4 +167,26 @@ public class LunchList extends TabActivity {
 			}
 		}
 	}
+	
+	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
+		public void onItemClick(	AdapterView<?> parent,
+									View view,
+									int position,
+									long id) {
+			Restaurant r = restaurants.get(position);
+			
+			name.setText(r.getName());
+			address.setText(r.getAddress());
+			
+			if(r.getType().equals("sit_down")) {
+				types.check(R.id.sit_down);
+			} else if(r.getType().equals("take_out")) {
+				types.check(R.id.take_out);
+			} else {
+				types.check(R.id.delivery);
+			}
+			
+			getTabHost().setCurrentTab(1);
+		} 
+	};
 }
