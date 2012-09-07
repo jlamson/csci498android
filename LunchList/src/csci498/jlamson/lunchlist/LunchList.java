@@ -3,7 +3,7 @@ package csci498.jlamson.lunchlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
+import android.app.TabActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,9 +17,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TabHost;
 import android.widget.TextView;
 
-public class LunchList extends Activity {
+public class LunchList extends TabActivity {
 	List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	RestaurantAdapter restaurantAdapter = null;
 	
@@ -47,6 +48,17 @@ public class LunchList extends Activity {
         											previousAddresses);
         addressField.setAdapter(addressAdapter);
         
+        TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
+        spec.setContent(R.id.restaurants);
+        spec.setIndicator("List", getResources().getDrawable(R.drawable.list_tab_icon));
+        getTabHost().addTab(spec);
+        
+        spec = getTabHost().newTabSpec("tag2");
+        spec.setContent(R.id.details);
+        spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant_tab_icon));
+        getTabHost().addTab(spec);
+        
+        getTabHost().setCurrentTab(0);
     }
 
 	private View.OnClickListener onSave = new View.OnClickListener() {
