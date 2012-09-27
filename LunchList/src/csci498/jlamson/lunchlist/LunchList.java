@@ -6,12 +6,14 @@ import java.util.List;
 import android.app.TabActivity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -38,9 +40,12 @@ public class LunchList extends TabActivity {
     
     Restaurant current = null;
     
+    int progress;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.main);
         
         name = (EditText)findViewById(R.id.name);
@@ -75,6 +80,31 @@ public class LunchList extends TabActivity {
         getTabHost().setCurrentTab(0);
     }
     
+    private void doSomeLongWork(final int incr) {
+    	runOnUiThread( new Runnable() {
+    		public void run() {
+    			progress += incr;
+    			setProgress(progress);
+    		}
+    	});
+    	
+    	SystemClock.sleep(250);
+    }
+    
+    private Runnable longTask = new Runnable() {
+    	public void run() {
+    		for(int i=0; i<20; i++) {
+    			doSomeLongWork(500);
+    		}
+    	
+	    	runOnUiThread( new Runnable() {
+	    		public void run() {
+	    			setProgressBarVisibility(false);
+	    		}
+	    	});
+    	}
+    };
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
     	new MenuInflater(this).inflate(R.menu.option, menu);
@@ -93,6 +123,10 @@ public class LunchList extends TabActivity {
     		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     		
     		return true;
+    	} else if (item.getItemId() == R.id.thread) {
+    		setProgressBarVisibility(true);
+    		progress = 0;
+    		new Thread(longTask).start();
     	}
     	return super.onOptionsItemSelected(item);
     }
@@ -201,4 +235,5 @@ public class LunchList extends TabActivity {
 			addressAdapter.add(address.getText().toString());
 		}
 	};
+
 }

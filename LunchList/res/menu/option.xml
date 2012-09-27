@@ -3,4 +3,7 @@
     <item android:id="@+id/toast"
           android:icon="@drawable/toast"
           android:title="@string/toast_label" />
+    <item android:id="@+id/thread"
+          android:icon="@drawable/thread"
+          android:title="@string/thread_label" />
 </menu>
