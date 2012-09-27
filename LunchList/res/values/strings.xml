@@ -11,5 +11,8 @@
 	<string name="radio_button_label_takeout">Take-out</string>
 	<string name="radio_button_label_sitdown">Sit-down</string>
 	<string name="radio_button_label_delivery">Delivery</string>
+	<string name="pick_date">When was your last visit here?</string>
+	<string name="last_visit_label">Last Visit:</string>
+	<string name="row_image_description">An icon displaying the type of restauraunt</string>
 	
 </resources>

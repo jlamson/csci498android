@@ -59,6 +59,17 @@
 			                android:text="@string/radio_button_label_delivery" />
 			        </RadioGroup>
 			    </TableRow>
+			    <TableRow>
+			        <TextView
+			            android:text="@string/last_visit_label" />
+			        <TextView
+			            android:id="@+id/last_visit"/>
+			    </TableRow>
+			    <Button 
+			        android:id="@+id/pick_date_button"
+				    android:layout_width="match_parent" 
+				    android:layout_height="wrap_content"
+				    android:text="@string/pick_date"  />
 			    <Button
 			        android:id="@+id/save"
 			        android:layout_width="match_parent"

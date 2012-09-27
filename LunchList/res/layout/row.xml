@@ -6,7 +6,8 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ball_yellow" />
+        android:src="@drawable/ball_green" 
+        android:contentDescription="@string/row_image_description"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,9 +21,17 @@
             android:ellipsize="end" 
             android:gravity="center_vertical" 
             android:layout_weight="1"
-            android:textColor="@color/yellow"/>
+            android:textColor="@color/green"/>
 		<TextView
             android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end" 
+            android:gravity="center_vertical" 
+            android:layout_weight="1"/>
+		<TextView
+            android:id="@+id/last_visit_row"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
