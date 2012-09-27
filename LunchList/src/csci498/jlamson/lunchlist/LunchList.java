@@ -85,6 +85,8 @@ public class LunchList extends TabActivity {
     		public void run() {
     			progress += incr;
     			setProgress(progress);
+    			((TextView)findViewById(R.id.thread_title)).setText("Thread is...");
+    			((TextView)findViewById(R.id.thread_status)).setText("working...");
     		}
     	});
     	
@@ -93,6 +95,7 @@ public class LunchList extends TabActivity {
     
     private Runnable longTask = new Runnable() {
     	public void run() {
+    		((TextView)findViewById(R.id.thread_title)).setText("Thread is...");
     		for(int i=0; i<20; i++) {
     			doSomeLongWork(500);
     		}
@@ -100,6 +103,7 @@ public class LunchList extends TabActivity {
 	    	runOnUiThread( new Runnable() {
 	    		public void run() {
 	    			setProgressBarVisibility(false);
+	    			((TextView)findViewById(R.id.thread_status)).setText("Done");
 	    		}
 	    	});
     	}

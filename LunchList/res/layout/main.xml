@@ -68,6 +68,16 @@
 				            android:maxLines="2"
 				            android:maxWidth="200sp" />
 				    </TableRow>
+				    <TableRow>
+				        <TextView 
+				            android:id="@+id/thread_title"
+				            android:gravity="center_horizontal"
+				            android:textSize="20dip"/>
+				        <TextView 
+				            android:id="@+id/thread_status"
+				            android:gravity="center_horizontal"
+				            android:textSize="20dip"/>
+				    </TableRow>
 				    <Button
 				        android:id="@+id/save"
 				        android:layout_width="match_parent"
