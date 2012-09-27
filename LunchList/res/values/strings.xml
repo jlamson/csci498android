@@ -15,5 +15,7 @@
 	<string name="notes_hint">notes go here</string>
 	<string name="row_image_description">An icon displaying the type of restauraunt</string>
 	<string name="toast_label">Raise Toast</string>
+	<string name="toggle_tab_label">Toggle Tab</string>
+	<string name="error_button_label">Generate an Error!</string>
 	
 </resources>

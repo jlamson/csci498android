@@ -3,9 +3,13 @@ package csci498.jlamson.lunchlist;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,9 +26,11 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LunchList extends TabActivity {
+	static final int TOAST_DIALOG_ID = 0;
+	static final int ERROR_DIALOG_ID = 1;
+	
 	List<Restaurant> restaurants = new ArrayList<Restaurant>();
 	RestaurantAdapter restaurantAdapter = null;
 	
@@ -50,6 +56,9 @@ public class LunchList extends TabActivity {
 		
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
+        
+        Button error = (Button)findViewById(R.id.error);
+        error.setOnClickListener(onError);
         
         ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
         restaurantAdapter = new RestaurantAdapter();
@@ -84,19 +93,60 @@ public class LunchList extends TabActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	if(item.getItemId() == R.id.toast) {
+    	    showDialog(TOAST_DIALOG_ID);
+    		return true;
+    	} else if (item.getItemId() == R.id.toggle_tab) {
+    		if(getTabHost().getCurrentTab() == 0) {
+    			getTabHost().setCurrentTab(1);
+    		} else {
+    			getTabHost().setCurrentTab(0);
+    		}
+    	}
+    	
+    	return super.onOptionsItemSelected(item);
+    }
+    		
+    public Dialog onCreateDialog(int id) {
+    	Dialog dialog;
+    	AlertDialog.Builder builder;
+    	switch (id) {
+    	case TOAST_DIALOG_ID:
     		String message = "No Restaurant Selected";
     		
     		if(current != null) {
     			message = current.getNotes();
     		}
     		
-    		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    		
-    		return true;
+    		builder = new AlertDialog.Builder(this);
+    	    builder	.setTitle(current.getName())
+    	    		.setMessage(message)
+    	    		.setCancelable(true)
+    	    		.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                dialog.cancel();
+			           }
+    	    		});
+    	    dialog = builder.create();
+    		break;
+    	case ERROR_DIALOG_ID:
+    		builder = new AlertDialog.Builder(this);
+    		builder	.setTitle("Error")
+    				.setMessage("We're sorry... It seems an unexpected error has occured")
+    				.setCancelable(false)
+    				.setNeutralButton("Close the app", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                LunchList.this.finish();
+			           }
+    	    		});
+    		dialog = builder.create();
+    		break;
+    	default:
+    		dialog = null;
     	}
-    	return super.onOptionsItemSelected(item);
+    	
+    	return dialog;
     }
-
+    
     class RestaurantAdapter extends ArrayAdapter<Restaurant> {
 		public RestaurantAdapter() {
 			super(	LunchList.this,
@@ -199,6 +249,18 @@ public class LunchList extends TabActivity {
 			
 			restaurantAdapter.add(current);
 			addressAdapter.add(address.getText().toString());
+		}
+	};
+	
+	
+	private View.OnClickListener onError = new View.OnClickListener() {
+		public void onClick(View v) {
+			try {
+				int x = 63746/0;
+			} catch (Exception e) {
+				Log.e("onError", "OH CRAP, Divide by 0", e);
+				showDialog(ERROR_DIALOG_ID);
+			}
 		}
 	};
 }
