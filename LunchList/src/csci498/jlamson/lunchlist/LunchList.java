@@ -55,7 +55,28 @@ public class LunchList extends TabActivity {
 		address = (EditText)findViewById(R.id.addr);
 		types = (RadioGroup)findViewById(R.id.types);
         notes = (EditText)findViewById(R.id.notes);
+        
+        int currTab = 0;
 		
+        if(savedInstanceState != null) {
+        	name.setText(savedInstanceState.getString("name"));
+        	address.setText(savedInstanceState.getString("address"));
+        	notes.setText(savedInstanceState.getString("notes"));
+        	
+        	if(savedInstanceState.getString("type").equals("sit_down")) {
+				types.check(R.id.sit_down);
+			} else if(savedInstanceState.getString("type").equals("take_out")) {
+				types.check(R.id.take_out);
+			} else {
+				types.check(R.id.delivery);
+			}
+        	
+        	currTab = savedInstanceState.getInt("currentTab");
+        	
+        	progress = savedInstanceState.getInt("progress");
+        	
+        }
+        
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
         
@@ -80,7 +101,7 @@ public class LunchList extends TabActivity {
         spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant_tab_icon));
         getTabHost().addTab(spec);
         
-        getTabHost().setCurrentTab(0);
+        getTabHost().setCurrentTab(currTab);
     }
     
     @Override
@@ -99,6 +120,26 @@ public class LunchList extends TabActivity {
     	}
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	outState.putInt("currentTab", getTabHost().getCurrentTab());
+    	outState.putInt("progress", progress);
+    	outState.putString("name", name.getText().toString());
+    	outState.putString("address", address.getText().toString());
+    	outState.putString("notes", notes.getText().toString());
+    	switch (types.getCheckedRadioButtonId()) {
+		case R.id.sit_down:
+			outState.putString("type", "sit_down");
+			break;
+		case R.id.take_out:
+			outState.putString("type", "take_out");
+			break;
+		case R.id.delivery:
+			outState.putString("type", "delivery");
+			break;
+		}
+    }
+    
     private void doSomeLongWork(final int incr) {
     	runOnUiThread( new Runnable() {
     		public void run() {
