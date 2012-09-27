@@ -14,5 +14,6 @@
 	<string name="notes_label">Notes:</string>
 	<string name="notes_hint">notes go here</string>
 	<string name="row_image_description">An icon displaying the type of restauraunt</string>
+	<string name="toast_label">Raise Toast</string>
 	
 </resources>
