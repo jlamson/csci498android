@@ -59,6 +59,8 @@ public class LunchList extends TabActivity {
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
         
+        progress = savedInstanceState.getInt("progress");
+        
         ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
         restaurantAdapter = new RestaurantAdapter();
         restaurantListview.setAdapter(restaurantAdapter);
@@ -84,14 +86,14 @@ public class LunchList extends TabActivity {
     }
     
     @Override
-    public void onPause() {
-    	super.onPause();
+    public void onStop() {
+    	super.onStop();
     	 isActive.set(false);
     }
     
     @Override
-    public void onResume() {
-    	super.onResume();
+    public void onStart() {
+    	super.onStart();
     	isActive.set(true);
     	
     	if(progress > 0) {
@@ -99,6 +101,12 @@ public class LunchList extends TabActivity {
     	}
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	outState.putInt("progress", progress);
+    }
+    
     private void doSomeLongWork(final int incr) {
     	runOnUiThread( new Runnable() {
     		public void run() {
