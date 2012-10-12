@@ -23,17 +23,24 @@ public class LunchList extends TabActivity {
     
     Restaurant current = null;
     
+    RestaurantHelper helper = null;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        
+    	
     	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        initDatabaseAccess();
         initFormElements();
         initRestaurantListView();
         initAddressAutoComplete();
         initTabs();
         
+    }
+    
+    private void initDatabaseAccess() {
+    	helper = new RestaurantHelper(this);
     }
     
     private void initFormElements() {
