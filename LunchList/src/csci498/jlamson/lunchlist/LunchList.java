@@ -82,6 +82,11 @@ public class LunchList extends TabActivity {
         
         getTabHost().setCurrentTab(0);
     }
+
+    public void onDestroy() {
+    	super.onDestroy();
+    	helper.close();
+    }
     
     class RestaurantAdapter extends ArrayAdapter<Restaurant> {
 		public RestaurantAdapter() {
