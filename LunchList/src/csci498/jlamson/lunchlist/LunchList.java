@@ -121,8 +121,6 @@ public class LunchList extends TabActivity {
 			
 			return row;
 		}
-		
-		
 	}
 	
 	static class RestaurantHolder {
