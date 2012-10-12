@@ -23,20 +23,20 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 public class LunchList extends TabActivity {
-	List<Restaurant> restaurants = new ArrayList<Restaurant>();
+	Cursor restaurantCursor;
 	RestaurantAdapter restaurantAdapter = null;
 	
 	List<String> previousAddresses = new ArrayList<String>();
-	ArrayAdapter<String> addressAdapter = null;
+	ArrayAdapter<String> addressAdapter;
 	
-	EditText name = null;
-    EditText address = null;
-    RadioGroup types = null;
-    EditText notes = null;
+	EditText name;
+    EditText address;
+    RadioGroup types;
+    EditText notes;
     
-    Restaurant current = null;
+    Restaurant current;
     
-    RestaurantHelper helper = null;
+    RestaurantHelper helper;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +68,10 @@ public class LunchList extends TabActivity {
     
     private void initRestaurantListView() {
     	 ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
-         restaurantAdapter = new RestaurantAdapter();
+         restaurantCursor = helper.getAll();
+         startManagingCursor(restaurantCursor);
+    	 restaurantAdapter = new RestaurantAdapter(restaurantCursor);
          restaurantListview.setAdapter(restaurantAdapter);
-         restaurantListview.setOnItemClickListener(onListClick);
     }
     
     private void initAddressAutoComplete() {
