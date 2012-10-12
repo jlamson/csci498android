@@ -5,9 +5,22 @@ import java.util.List;
 
 import android.app.TabActivity;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 public class LunchList extends TabActivity {
 	List<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -88,31 +101,28 @@ public class LunchList extends TabActivity {
     	helper.close();
     }
     
-    class RestaurantAdapter extends ArrayAdapter<Restaurant> {
-		public RestaurantAdapter() {
-			super(	LunchList.this,
-					android.R.layout.simple_list_item_1,
-					restaurants);
+    class RestaurantAdapter extends CursorAdapter {
+		public RestaurantAdapter(Cursor c) {
+			super(	LunchList.this, c);
 		}
-		
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View row = convertView;
-			RestaurantHolder holder = null;
-			
-			if(row==null) {
-				LayoutInflater inflater = getLayoutInflater();
-				
-				row = inflater.inflate(R.layout.row, null);
-				holder = new RestaurantHolder(row);
-				row.setTag(holder);
-			} else {
-				holder = (RestaurantHolder)row.getTag();
-			}
-			
-			holder.populateFrom(restaurants.get(position), LunchList.this);
+
+		@Override
+		public void bindView(View row, Context context, Cursor c) {
+			RestaurantHolder holder = (RestautantHolder) row.getTag();
+			holder.populateFrom(c, helper);
+		}
+
+		@Override
+		public View newView(Context context, Cursor c, ViewGroup parent) {
+			LayoutInflater inflator = getLayoutInflater();
+			View row = inflator.inflate(R.layout.row, parent, false);
+			RestaurantHolder holder = new RestaurantHolder(row);
+			row.setTag(holder);
 			
 			return row;
 		}
+		
+		
 	}
 	
 	static class RestaurantHolder {
@@ -162,8 +172,7 @@ public class LunchList extends TabActivity {
 			getTabHost().setCurrentTab(1);
 		} 
 	};
-	
-	
+		
 	private View.OnClickListener onSave = new View.OnClickListener() {
 		public void onClick(View v) {
 			
