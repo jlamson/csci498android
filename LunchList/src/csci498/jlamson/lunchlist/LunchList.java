@@ -135,13 +135,13 @@ public class LunchList extends TabActivity {
 			icon =		(ImageView)row.findViewById(R.id.icon);
 		}
 		
-		public void populateFrom(Restaurant r, Context ll) {
-			name.setText(r.getName());
-			address.setText(r.getAddress());
+		public void populateFrom(Cursor c, RestaurantHelper helper) {
+			name.setText(helper.getName(c));
+			address.setText(helper.getAddress(c));
 			
-			if(r.getType().equals("sit_down")) {
+			if(helper.getType(c).equals("sit_down")) {
 				icon.setImageResource(R.drawable.ball_red);
-			} else if(r.getType().equals("take_out")) {
+			} else if(helper.getType(c).equals("take_out")) {
 				icon.setImageResource(R.drawable.ball_yellow);
 			} else {
 				icon.setImageResource(R.drawable.ball_green);
