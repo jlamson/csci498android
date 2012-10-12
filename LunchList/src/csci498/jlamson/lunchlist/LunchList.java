@@ -7,20 +7,8 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.Button;
-import android.widget.CursorAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.TabHost;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 public class LunchList extends TabActivity {
 	Cursor restaurantCursor;
@@ -47,7 +35,6 @@ public class LunchList extends TabActivity {
         initDatabaseAccess();
         initFormElements();
         initRestaurantListView();
-        initAddressAutoComplete();
         initTabs();
         
     }
@@ -72,14 +59,7 @@ public class LunchList extends TabActivity {
          startManagingCursor(restaurantCursor);
     	 restaurantAdapter = new RestaurantAdapter(restaurantCursor);
          restaurantListview.setAdapter(restaurantAdapter);
-    }
-    
-    private void initAddressAutoComplete() {
-    	AutoCompleteTextView addressField = (AutoCompleteTextView)findViewById(R.id.addr);
-        addressAdapter = new ArrayAdapter<String>(	this,
-        											android.R.layout.simple_dropdown_item_1line,
-        											previousAddresses);
-        addressField.setAdapter(addressAdapter);
+         restaurantListview.setOnItemClickListener(onListClick);
     }
     
     private void initTabs() {
@@ -109,7 +89,7 @@ public class LunchList extends TabActivity {
 
 		@Override
 		public void bindView(View row, Context context, Cursor c) {
-			RestaurantHolder holder = (RestautantHolder) row.getTag();
+			RestaurantHolder holder = (RestaurantHolder) row.getTag();
 			holder.populateFrom(c, helper);
 		}
 
@@ -139,9 +119,9 @@ public class LunchList extends TabActivity {
 			name.setText(helper.getName(c));
 			address.setText(helper.getAddress(c));
 			
-			if(helper.getType(c).equals("sit_down")) {
+			if (helper.getType(c).equals("sit_down")) {
 				icon.setImageResource(R.drawable.ball_red);
-			} else if(helper.getType(c).equals("take_out")) {
+			} else if (helper.getType(c).equals("take_out")) {
 				icon.setImageResource(R.drawable.ball_yellow);
 			} else {
 				icon.setImageResource(R.drawable.ball_green);
@@ -154,15 +134,15 @@ public class LunchList extends TabActivity {
 									View view,
 									int position,
 									long id) {
-			current = restaurants.get(position);
+			restaurantCursor.moveToPosition(position);
 			
-			name.setText(current.getName());
-			address.setText(current.getAddress());
-			notes.setText(current.getNotes());
+			name.setText(helper.getName(restaurantCursor));
+			address.setText(helper.getAddress(restaurantCursor));
+			notes.setText(helper.getNotes(restaurantCursor));
 			
-			if(current.getType().equals("sit_down")) {
+			if (helper.getType(restaurantCursor).equals("sit_down")) {
 				types.check(R.id.sit_down);
-			} else if(current.getType().equals("take_out")) {
+			} else if (helper.getType(restaurantCursor).equals("take_out")) {
 				types.check(R.id.take_out);
 			} else {
 				types.check(R.id.delivery);
