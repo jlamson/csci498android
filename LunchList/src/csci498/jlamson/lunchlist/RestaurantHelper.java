@@ -28,14 +28,14 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		//no action until version 2+ is implemented
 	}
 	
-	public void insert(Restaurant r) {
+	public void insert(String name, String address, String type, String notes) {
 		
 		ContentValues cv = new ContentValues();
 		
-		cv.put("name", r.getName());
-		cv.put("address", r.getAddress());
-		cv.put("type", r.getType());
-		cv.put("notes", r.getNotes());
+		cv.put("name", name);
+		cv.put("address", address);
+		cv.put("type", type);
+		cv.put("notes", notes);
 		
 		getWritableDatabase().insert("restaurants", "name", cv);
 		
