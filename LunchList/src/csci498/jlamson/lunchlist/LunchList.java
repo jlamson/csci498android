@@ -2,19 +2,13 @@ package csci498.jlamson.lunchlist;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.TabActivity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -25,7 +19,6 @@ import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LunchList extends TabActivity {
 	List<Restaurant> restaurants = new ArrayList<Restaurant>();
@@ -41,36 +34,47 @@ public class LunchList extends TabActivity {
     
     Restaurant current = null;
     
-    int progress;
-    
-    AtomicBoolean isActive = new AtomicBoolean(true);
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_PROGRESS);
+        
+    	super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        name = (EditText)findViewById(R.id.name);
+        initFormElements();
+        initRestaurantListView();
+        initAddressAutoComplete();
+        initTabs();
+        
+    }
+    
+    private void initFormElements() {
+    	name = (EditText)findViewById(R.id.name);
 		address = (EditText)findViewById(R.id.addr);
 		types = (RadioGroup)findViewById(R.id.types);
         notes = (EditText)findViewById(R.id.notes);
-		
+        
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
-        
-        ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
-        restaurantAdapter = new RestaurantAdapter();
-        restaurantListview.setAdapter(restaurantAdapter);
-        restaurantListview.setOnItemClickListener(onListClick);
-        
-        AutoCompleteTextView addressField = (AutoCompleteTextView)findViewById(R.id.addr);
+    }
+    
+    private void initRestaurantListView() {
+    	 ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
+         restaurantAdapter = new RestaurantAdapter();
+         restaurantListview.setAdapter(restaurantAdapter);
+         restaurantListview.setOnItemClickListener(onListClick);
+    }
+    
+    private void initAddressAutoComplete() {
+    	AutoCompleteTextView addressField = (AutoCompleteTextView)findViewById(R.id.addr);
         addressAdapter = new ArrayAdapter<String>(	this,
         											android.R.layout.simple_dropdown_item_1line,
         											previousAddresses);
         addressField.setAdapter(addressAdapter);
-        
-        TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
+    }
+    
+    private void initTabs() {
+    	
+    	TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
         spec.setContent(R.id.restaurants);
         spec.setIndicator("List", getResources().getDrawable(R.drawable.list_tab_icon));
         getTabHost().addTab(spec);
@@ -83,79 +87,6 @@ public class LunchList extends TabActivity {
         getTabHost().setCurrentTab(0);
     }
     
-    @Override
-    public void onPause() {
-    	super.onPause();
-    	 isActive.set(false);
-    }
-    
-    @Override
-    public void onResume() {
-    	super.onResume();
-    	isActive.set(true);
-    	
-    	if(progress > 0) {
-    		startWork();
-    	}
-    }
-
-    private void doSomeLongWork(final int incr) {
-    	runOnUiThread( new Runnable() {
-    		public void run() {
-    			progress += incr;
-    			setProgress(progress);
-    		}
-    	});
-    	
-    	SystemClock.sleep(250);
-    }
-    
-    private Runnable longTask = new Runnable() {
-    	public void run() {
-    		for(int i=0; i<10000 && isActive.get(); i+=200) {
-    			doSomeLongWork(200);
-    		}
-    		
-    		if(isActive.get()) {
-		    	runOnUiThread( new Runnable() {
-		    		public void run() {
-		    			setProgressBarVisibility(false);
-		    			progress = 0;
-		    		}
-		    	});
-    		}
-    	}
-    };
-    
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	new MenuInflater(this).inflate(R.menu.option, menu);
-    	return(super.onCreateOptionsMenu(menu));
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	if(item.getItemId() == R.id.toast) {
-    		String message = "No Restaurant Selected";
-    		
-    		if(current != null) {
-    			message = current.getNotes();
-    		}
-    		
-    		Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    		
-    		return true;
-    	} else if (item.getItemId() == R.id.thread) {
-    		startWork();
-    	}
-    	return super.onOptionsItemSelected(item);
-    }
-    
-    private void startWork() {
-    	setProgressBarVisibility(true);
-		new Thread(longTask).start();
-	}
-
     class RestaurantAdapter extends ArrayAdapter<Restaurant> {
 		public RestaurantAdapter() {
 			super(	LunchList.this,
