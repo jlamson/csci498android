@@ -1,6 +1,7 @@
 package csci498.jlamson.lunchlist;
 
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -26,7 +27,11 @@ public class DetailForm extends Activity {
         
         initDatabaseAccess();
         initFormElements();
-        initRestaurantFromId();
+        initRestaurantId();
+        
+        if(restaurantId != null) {
+        	loadRestaurant();
+        }
     }
     
     private void initDatabaseAccess() {
@@ -43,10 +48,31 @@ public class DetailForm extends Activity {
         save.setOnClickListener(onSave);
     }
     
-    private void initRestaurantFromId() {
+    private void initRestaurantId() {
     	restaurantId = getIntent().getStringExtra(LunchList.ID_EXTRA);
     }
 
+    private void loadRestaurant() {
+    	
+    	Cursor c = helper.getById(restaurantId);
+    	c.moveToFirst();
+    	
+    	name.setText(helper.getName(c));
+		address.setText(helper.getAddress(c));
+		notes.setText(helper.getNotes(c));
+		
+		if (helper.getType(c).equals("sit_down")) {
+			types.check(R.id.sit_down);
+		} else if (helper.getType(c).equals("take_out")) {
+			types.check(R.id.take_out);
+		} else {
+			types.check(R.id.delivery);
+		}
+		
+		c.close();
+		
+    }
+    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_detail_form, menu);
