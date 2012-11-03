@@ -78,7 +78,7 @@ public class DetailForm extends Activity {
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_detail_form, menu);
+        getMenuInflater().inflate(R.menu.detail_option, menu);
         return true;
     }
     
