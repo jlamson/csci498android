@@ -6,8 +6,10 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +41,8 @@ public class LunchList extends ListActivity {
 
 	RestaurantHelper helper;
 
+	private SharedPreferences preference;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -47,8 +51,9 @@ public class LunchList extends ListActivity {
 
 		initDatabaseAccess();
 		initFormElements();
+		initPreference();
 		initRestaurantListView();
-
+		
 	}
 
 	private void initDatabaseAccess() {
@@ -62,8 +67,12 @@ public class LunchList extends ListActivity {
 		notes = (EditText) findViewById(R.id.notes);
 	}
 
+	private void initPreference() {
+		preference = PreferenceManager.getDefaultSharedPreferences(this);
+	}
+	
 	private void initRestaurantListView() {
-		restaurantCursor = helper.getAll();
+		restaurantCursor = helper.getAll(preference.getString("sort_order", "name"));
 		startManagingCursor(restaurantCursor);
 		restaurantAdapter = new RestaurantAdapter(restaurantCursor);
 		setListAdapter(restaurantAdapter);
