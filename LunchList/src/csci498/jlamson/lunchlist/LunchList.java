@@ -69,6 +69,7 @@ public class LunchList extends ListActivity {
 
 	private void initPreference() {
 		preference = PreferenceManager.getDefaultSharedPreferences(this);
+		preference.registerOnSharedPreferenceChangeListener(prefListener);
 	}
 	
 	private void initRestaurantListView() {
@@ -154,5 +155,13 @@ public class LunchList extends ListActivity {
 		i.putExtra(ID_EXTRA, String.valueOf(id));
 		startActivity(i);
 	}
-
+	
+	private SharedPreferences.OnSharedPreferenceChangeListener prefListener = 
+		new SharedPreferences.OnSharedPreferenceChangeListener() {
+			public void onSharedPreferenceChanged(SharedPreferences sharedPrefs, String key) {
+				if (key.equals("sort_order")) {
+					//TODO implement stub
+				}
+			}
+		};
 }
