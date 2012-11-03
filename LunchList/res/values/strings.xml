@@ -15,8 +15,7 @@
     <string name="notes_label">Notes:</string>
     <string name="save_button_label">Save</string>
     
-    <string name="toast_label">Raise Toast</string>
-    <string name="thread_label">Fork a Thread</string>
+    <string name="add_menu_label">Add a Restaurant</string>
     
     <string name="notes_hint">notes go here</string>
     <string name="row_image_description">An icon displaying the type of restauraunt</string>
