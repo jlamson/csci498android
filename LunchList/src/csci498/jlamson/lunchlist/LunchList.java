@@ -3,15 +3,26 @@ package csci498.jlamson.lunchlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.TabActivity;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CursorAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TabHost;
+import android.widget.TextView;
 
-public class LunchList extends TabActivity {
+public class LunchList extends ListActivity {
 	Cursor restaurantCursor;
 	RestaurantAdapter restaurantAdapter = null;
 	
@@ -34,7 +45,6 @@ public class LunchList extends TabActivity {
         initDatabaseAccess();
         initFormElements();
         initRestaurantListView();
-        initTabs();
         
     }
     
@@ -59,21 +69,6 @@ public class LunchList extends TabActivity {
     	 restaurantAdapter = new RestaurantAdapter(restaurantCursor);
          restaurantListview.setAdapter(restaurantAdapter);
          restaurantListview.setOnItemClickListener(onListClick);
-    }
-    
-    private void initTabs() {
-    	
-    	TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
-        spec.setContent(R.id.restaurants);
-        spec.setIndicator("List", getResources().getDrawable(R.drawable.list_tab_icon));
-        getTabHost().addTab(spec);
-        
-        spec = getTabHost().newTabSpec("tag2");
-        spec.setContent(R.id.details);
-        spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant_tab_icon));
-        getTabHost().addTab(spec);
-        
-        getTabHost().setCurrentTab(0);
     }
 
     public void onDestroy() {
