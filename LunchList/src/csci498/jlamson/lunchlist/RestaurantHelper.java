@@ -44,6 +44,12 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 					null);
 	}
 	
+	public Cursor getById(String id) {
+		String[] args = {id};
+		String query = "SELECT _id, name, address, type, notes FROM restaurants WHERE _ID=?";
+		return getReadableDatabase().rawQuery(query, args);
+	}
+	
 	public String getName(Cursor c) 	{ return c.getString(1); }
 	public String getAddress(Cursor c) 	{ return c.getString(2); }
 	public String getType(Cursor c) 	{ return c.getString(3); }
