@@ -80,6 +80,11 @@ public class DetailForm extends Activity {
     }
     
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    }
+    
+    @Override
     public void onDestroy() {
     	super.onDestroy();
     	helper.close();
