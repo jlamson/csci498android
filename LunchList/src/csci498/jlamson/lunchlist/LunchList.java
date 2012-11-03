@@ -173,6 +173,7 @@ public class LunchList extends TabActivity {
 						address.getText().toString(),
 						type, 
 						notes.getText().toString());
+			restaurantCursor.requery();
 		}
 	};
 
