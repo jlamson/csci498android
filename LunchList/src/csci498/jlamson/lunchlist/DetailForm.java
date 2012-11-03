@@ -9,15 +9,16 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 public class DetailForm extends Activity {
-
-
+	
 	EditText name;
     EditText address;
     RadioGroup types;
     EditText notes;
     
     RestaurantHelper helper;
-	
+    
+    String restaurantId;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,7 @@ public class DetailForm extends Activity {
         
         initDatabaseAccess();
         initFormElements();
+        initRestaurantFromId();
     }
     
     private void initDatabaseAccess() {
@@ -39,6 +41,10 @@ public class DetailForm extends Activity {
         
         Button save = (Button)findViewById(R.id.save);
         save.setOnClickListener(onSave);
+    }
+    
+    private void initRestaurantFromId() {
+    	restaurantId = getIntent().getStringExtra(LunchList.ID_EXTRA);
     }
 
     @Override
