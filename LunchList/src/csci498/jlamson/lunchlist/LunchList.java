@@ -1,8 +1,5 @@
 package csci498.jlamson.lunchlist;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CursorAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class LunchList extends ListActivity {
@@ -30,14 +24,6 @@ public class LunchList extends ListActivity {
 
 	Cursor modelCursor;
 	RestaurantAdapter restaurantAdapter = null;
-
-	List<String> previousAddresses = new ArrayList<String>();
-	ArrayAdapter<String> addressAdapter;
-
-	EditText name;
-	EditText address;
-	RadioGroup types;
-	EditText notes;
 
 	RestaurantHelper helper;
 
@@ -50,7 +36,6 @@ public class LunchList extends ListActivity {
 		setContentView(R.layout.main);
 
 		initDatabaseAccess();
-		initFormElements();
 		initPreference();
 		initRestaurantListView();
 		
@@ -58,13 +43,6 @@ public class LunchList extends ListActivity {
 
 	private void initDatabaseAccess() {
 		helper = new RestaurantHelper(this);
-	}
-
-	private void initFormElements() {
-		name = (EditText) findViewById(R.id.name);
-		address = (EditText) findViewById(R.id.addr);
-		types = (RadioGroup) findViewById(R.id.types);
-		notes = (EditText) findViewById(R.id.notes);
 	}
 
 	private void initPreference() {
