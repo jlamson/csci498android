@@ -5,6 +5,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,4 +60,14 @@ public class FeedActivity extends ListActivity {
 			}
 		}
     }
+    
+    private void goBlooey(Throwable t) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	
+    	builder
+    		.setTitle("Exception!")
+    		.setMessage(t.toString())
+    		.setPositiveButton("OK", null)
+    		.show();
+	}
 }
