@@ -11,18 +11,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 public class LunchList extends ListActivity {
+	
+	public final static String ID_EXTRA = "csci498.jlamson.lunchlist._ID";
+	
 	Cursor restaurantCursor;
 	RestaurantAdapter restaurantAdapter = null;
 	
@@ -60,12 +60,10 @@ public class LunchList extends ListActivity {
     }
     
     private void initRestaurantListView() {
-    	 ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
          restaurantCursor = helper.getAll();
          startManagingCursor(restaurantCursor);
     	 restaurantAdapter = new RestaurantAdapter(restaurantCursor);
-         restaurantListview.setAdapter(restaurantAdapter);
-         restaurantListview.setOnItemClickListener(onListClick);
+         setListAdapter(restaurantAdapter);
     }
 
     public void onDestroy() {
@@ -120,14 +118,11 @@ public class LunchList extends ListActivity {
 		}
 	}
 	
-	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
-		public void onItemClick(	AdapterView<?> parent,
-									View view,
-									int position,
-									long id) {
-			Intent i = new Intent(LunchList.this, DetailForm.class);
-			startActivity(i);
-		} 
-	};
+	@Override
+	public void onListItemClick(ListView list, View view, int position, long id) {
+		Intent i = new Intent(LunchList.this, DetailForm.class);
+		i.putExtra(ID_EXTRA, String.valueOf(id));
+		startActivity(i);
+	} 
 		
 }
