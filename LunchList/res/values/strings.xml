@@ -10,13 +10,13 @@
     	<string name="radio_button_label_takeout">Take-out</string>
     	<string name="radio_button_label_sitdown">Sit-down</string>
     	<string name="radio_button_label_delivery">Delivery</string>
-    <string name="notes_label">Notes:</string>
     <string name="save_button_label">Save</string>
     
     <string name="add_menu_label">Add a Restaurant</string>
     <string name="pref_menu_label">Settings</string>
     
-    <string name="notes_hint">notes go here</string>
+    <string name="notes_hint">Notes:</string>
+    <string name="feed_hint">Feed URL</string>
     <string name="row_image_description">An icon displaying the type of restauraunt</string>
     <string name="empty_list_text">Click the menu icon for the option to add a retaurant</string>
     

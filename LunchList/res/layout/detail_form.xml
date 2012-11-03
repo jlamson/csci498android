@@ -25,7 +25,8 @@
 	        <RadioGroup android:id="@+id/types" >
 	            <RadioButton 
 	                android:id="@+id/sit_down"
-	                android:text="@string/radio_button_label_sitdown" />
+	                android:text="@string/radio_button_label_sitdown" 
+	                android:checked="true" />
 	            <RadioButton 
 	                android:id="@+id/take_out"
 	                android:text="@string/radio_button_label_takeout" />
@@ -34,17 +35,17 @@
 	                android:text="@string/radio_button_label_delivery" />
 	        </RadioGroup>
 	    </TableRow>
-	    <TableRow>
-	        <TextView android:text="@string/notes_label" />
-	        <EditText 
-	            android:id="@+id/notes"
-	            android:hint="@string/notes_hint"
-	            android:inputType="textMultiLine"
-	            android:gravity="top"
-	            android:lines="2"
-	            android:scrollHorizontally="false"
-	            android:maxLines="2" />
-	    </TableRow>
+        <EditText 
+            android:id="@+id/notes"
+            android:hint="@string/notes_hint"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:lines="2"
+            android:scrollHorizontally="false"
+            android:maxLines="2" />
+        <EditText
+            android:id="@+id/feed"
+            android:hint="@string/feed_hint" />
 	    <Button
 	        android:id="@+id/save"
 	        android:layout_width="match_parent"
