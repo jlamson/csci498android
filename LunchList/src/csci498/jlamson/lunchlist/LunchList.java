@@ -23,8 +23,6 @@ public class LunchList extends TabActivity {
     RadioGroup types;
     EditText notes;
     
-    Restaurant current;
-    
     RestaurantHelper helper;
     
     @Override
