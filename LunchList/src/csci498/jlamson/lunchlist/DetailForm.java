@@ -9,7 +9,7 @@ public class DetailForm extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_form);
+        //setContentView(R.layout.activity_detail_form);
     }
 
     @Override
