@@ -6,8 +6,10 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +28,7 @@ public class LunchList extends ListActivity {
 
 	public final static String ID_EXTRA = "csci498.jlamson.lunchlist._ID";
 
-	Cursor restaurantCursor;
+	Cursor modelCursor;
 	RestaurantAdapter restaurantAdapter = null;
 
 	List<String> previousAddresses = new ArrayList<String>();
@@ -39,6 +41,8 @@ public class LunchList extends ListActivity {
 
 	RestaurantHelper helper;
 
+	private SharedPreferences preference;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -47,8 +51,9 @@ public class LunchList extends ListActivity {
 
 		initDatabaseAccess();
 		initFormElements();
+		initPreference();
 		initRestaurantListView();
-
+		
 	}
 
 	private void initDatabaseAccess() {
@@ -62,10 +67,20 @@ public class LunchList extends ListActivity {
 		notes = (EditText) findViewById(R.id.notes);
 	}
 
+	private void initPreference() {
+		preference = PreferenceManager.getDefaultSharedPreferences(this);
+		preference.registerOnSharedPreferenceChangeListener(prefListener);
+	}
+	
 	private void initRestaurantListView() {
-		restaurantCursor = helper.getAll();
-		startManagingCursor(restaurantCursor);
-		restaurantAdapter = new RestaurantAdapter(restaurantCursor);
+		if (modelCursor != null) {
+			stopManagingCursor(modelCursor);
+			modelCursor.close();
+		}
+		
+		modelCursor = helper.getAll(preference.getString("sort_order", "name"));
+		startManagingCursor(modelCursor);
+		restaurantAdapter = new RestaurantAdapter(modelCursor);
 		setListAdapter(restaurantAdapter);
 	}
 
@@ -84,6 +99,9 @@ public class LunchList extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.add) {
 			startActivity(new Intent(LunchList.this, DetailForm.class));
+			return true;
+		} else if (item.getItemId() == R.id.prefs) {
+			startActivity(new Intent(LunchList.this, EditPreferences.class));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -142,5 +160,13 @@ public class LunchList extends ListActivity {
 		i.putExtra(ID_EXTRA, String.valueOf(id));
 		startActivity(i);
 	}
-
+	
+	private SharedPreferences.OnSharedPreferenceChangeListener prefListener = 
+		new SharedPreferences.OnSharedPreferenceChangeListener() {
+			public void onSharedPreferenceChanged(SharedPreferences sharedPrefs, String key) {
+				if (key.equals("sort_order")) {
+					initRestaurantListView();
+				}
+			}
+		};
 }
