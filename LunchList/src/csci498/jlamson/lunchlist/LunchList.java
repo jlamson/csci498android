@@ -57,9 +57,6 @@ public class LunchList extends ListActivity {
 		address = (EditText)findViewById(R.id.addr);
 		types = (RadioGroup)findViewById(R.id.types);
         notes = (EditText)findViewById(R.id.notes);
-        
-        Button save = (Button)findViewById(R.id.save);
-        save.setOnClickListener(onSave);
     }
     
     private void initRestaurantListView() {
@@ -133,29 +130,4 @@ public class LunchList extends ListActivity {
 		} 
 	};
 		
-	private View.OnClickListener onSave = new View.OnClickListener() {
-		public void onClick(View v) {
-			
-			String type = "";
-			
-			switch (types.getCheckedRadioButtonId()) {
-			case R.id.sit_down:
-				type = "sit_down";
-				break;
-			case R.id.take_out:
-				type = "take_out";
-				break;
-			case R.id.delivery:
-				type = "delivery";
-				break;
-			}
-			
-			helper.insert(name.getText().toString(),
-						address.getText().toString(),
-						type, 
-						notes.getText().toString());
-			restaurantCursor.requery();
-		}
-	};
-
 }
