@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.*;
@@ -134,21 +135,8 @@ public class LunchList extends TabActivity {
 									View view,
 									int position,
 									long id) {
-			restaurantCursor.moveToPosition(position);
-			
-			name.setText(helper.getName(restaurantCursor));
-			address.setText(helper.getAddress(restaurantCursor));
-			notes.setText(helper.getNotes(restaurantCursor));
-			
-			if (helper.getType(restaurantCursor).equals("sit_down")) {
-				types.check(R.id.sit_down);
-			} else if (helper.getType(restaurantCursor).equals("take_out")) {
-				types.check(R.id.take_out);
-			} else {
-				types.check(R.id.delivery);
-			}
-			
-			getTabHost().setCurrentTab(1);
+			Intent i = new Intent(LunchList.this, DetailForm.class);
+			startActivity(i);
 		} 
 	};
 		
