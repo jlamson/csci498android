@@ -28,7 +28,7 @@ public class LunchList extends ListActivity {
 
 	public final static String ID_EXTRA = "csci498.jlamson.lunchlist._ID";
 
-	Cursor restaurantCursor;
+	Cursor modelCursor;
 	RestaurantAdapter restaurantAdapter = null;
 
 	List<String> previousAddresses = new ArrayList<String>();
@@ -73,9 +73,14 @@ public class LunchList extends ListActivity {
 	}
 	
 	private void initRestaurantListView() {
-		restaurantCursor = helper.getAll(preference.getString("sort_order", "name"));
-		startManagingCursor(restaurantCursor);
-		restaurantAdapter = new RestaurantAdapter(restaurantCursor);
+		if (modelCursor != null) {
+			stopManagingCursor(modelCursor);
+			modelCursor.close();
+		}
+		
+		modelCursor = helper.getAll(preference.getString("sort_order", "name"));
+		startManagingCursor(modelCursor);
+		restaurantAdapter = new RestaurantAdapter(modelCursor);
 		setListAdapter(restaurantAdapter);
 	}
 
@@ -160,7 +165,7 @@ public class LunchList extends ListActivity {
 		new SharedPreferences.OnSharedPreferenceChangeListener() {
 			public void onSharedPreferenceChanged(SharedPreferences sharedPrefs, String key) {
 				if (key.equals("sort_order")) {
-					//TODO implement stub
+					initRestaurantListView();
 				}
 			}
 		};
