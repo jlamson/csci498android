@@ -3,88 +3,95 @@ package csci498.jlamson.lunchlist;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.TabActivity;
+import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
-public class LunchList extends TabActivity {
+public class LunchList extends ListActivity {
+
+	public final static String ID_EXTRA = "csci498.jlamson.lunchlist._ID";
+
 	Cursor restaurantCursor;
 	RestaurantAdapter restaurantAdapter = null;
-	
+
 	List<String> previousAddresses = new ArrayList<String>();
 	ArrayAdapter<String> addressAdapter;
-	
-	EditText name;
-    EditText address;
-    RadioGroup types;
-    EditText notes;
-    
-    Restaurant current;
-    
-    RestaurantHelper helper;
-    
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-    	
-    	super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        
-        initDatabaseAccess();
-        initFormElements();
-        initRestaurantListView();
-        initTabs();
-        
-    }
-    
-    private void initDatabaseAccess() {
-    	helper = new RestaurantHelper(this);
-    }
-    
-    private void initFormElements() {
-    	name = (EditText)findViewById(R.id.name);
-		address = (EditText)findViewById(R.id.addr);
-		types = (RadioGroup)findViewById(R.id.types);
-        notes = (EditText)findViewById(R.id.notes);
-        
-        Button save = (Button)findViewById(R.id.save);
-        save.setOnClickListener(onSave);
-    }
-    
-    private void initRestaurantListView() {
-    	 ListView restaurantListview = (ListView)findViewById(R.id.restaurants);
-         restaurantCursor = helper.getAll();
-         startManagingCursor(restaurantCursor);
-    	 restaurantAdapter = new RestaurantAdapter(restaurantCursor);
-         restaurantListview.setAdapter(restaurantAdapter);
-         restaurantListview.setOnItemClickListener(onListClick);
-    }
-    
-    private void initTabs() {
-    	
-    	TabHost.TabSpec spec = getTabHost().newTabSpec("tag1");
-        spec.setContent(R.id.restaurants);
-        spec.setIndicator("List", getResources().getDrawable(R.drawable.list_tab_icon));
-        getTabHost().addTab(spec);
-        
-        spec = getTabHost().newTabSpec("tag2");
-        spec.setContent(R.id.details);
-        spec.setIndicator("Details", getResources().getDrawable(R.drawable.restaurant_tab_icon));
-        getTabHost().addTab(spec);
-        
-        getTabHost().setCurrentTab(0);
-    }
 
-    public void onDestroy() {
-    	super.onDestroy();
-    	helper.close();
-    }
-    
-    class RestaurantAdapter extends CursorAdapter {
+	EditText name;
+	EditText address;
+	RadioGroup types;
+	EditText notes;
+
+	RestaurantHelper helper;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		initDatabaseAccess();
+		initFormElements();
+		initRestaurantListView();
+
+	}
+
+	private void initDatabaseAccess() {
+		helper = new RestaurantHelper(this);
+	}
+
+	private void initFormElements() {
+		name = (EditText) findViewById(R.id.name);
+		address = (EditText) findViewById(R.id.addr);
+		types = (RadioGroup) findViewById(R.id.types);
+		notes = (EditText) findViewById(R.id.notes);
+	}
+
+	private void initRestaurantListView() {
+		restaurantCursor = helper.getAll();
+		startManagingCursor(restaurantCursor);
+		restaurantAdapter = new RestaurantAdapter(restaurantCursor);
+		setListAdapter(restaurantAdapter);
+	}
+
+	public void onDestroy() {
+		super.onDestroy();
+		helper.close();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		new MenuInflater(this).inflate(R.menu.option, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == R.id.add) {
+			startActivity(new Intent(LunchList.this, DetailForm.class));
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	class RestaurantAdapter extends CursorAdapter {
 		public RestaurantAdapter(Cursor c) {
-			super(	LunchList.this, c);
+			super(LunchList.this, c);
 		}
 
 		@Override
@@ -99,26 +106,26 @@ public class LunchList extends TabActivity {
 			View row = inflator.inflate(R.layout.row, parent, false);
 			RestaurantHolder holder = new RestaurantHolder(row);
 			row.setTag(holder);
-			
+
 			return row;
 		}
 	}
-	
+
 	static class RestaurantHolder {
 		private TextView name = null;
 		private TextView address = null;
 		private ImageView icon = null;
-	
+
 		public RestaurantHolder(View row) {
-			name = 		(TextView)row.findViewById(R.id.title);
-			address = 	(TextView)row.findViewById(R.id.address);
-			icon =		(ImageView)row.findViewById(R.id.icon);
+			name = (TextView) row.findViewById(R.id.title);
+			address = (TextView) row.findViewById(R.id.address);
+			icon = (ImageView) row.findViewById(R.id.icon);
 		}
-		
+
 		public void populateFrom(Cursor c, RestaurantHelper helper) {
 			name.setText(helper.getName(c));
 			address.setText(helper.getAddress(c));
-			
+
 			if (helper.getType(c).equals("sit_down")) {
 				icon.setImageResource(R.drawable.ball_red);
 			} else if (helper.getType(c).equals("take_out")) {
@@ -128,53 +135,12 @@ public class LunchList extends TabActivity {
 			}
 		}
 	}
-	
-	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
-		public void onItemClick(	AdapterView<?> parent,
-									View view,
-									int position,
-									long id) {
-			restaurantCursor.moveToPosition(position);
-			
-			name.setText(helper.getName(restaurantCursor));
-			address.setText(helper.getAddress(restaurantCursor));
-			notes.setText(helper.getNotes(restaurantCursor));
-			
-			if (helper.getType(restaurantCursor).equals("sit_down")) {
-				types.check(R.id.sit_down);
-			} else if (helper.getType(restaurantCursor).equals("take_out")) {
-				types.check(R.id.take_out);
-			} else {
-				types.check(R.id.delivery);
-			}
-			
-			getTabHost().setCurrentTab(1);
-		} 
-	};
-		
-	private View.OnClickListener onSave = new View.OnClickListener() {
-		public void onClick(View v) {
-			
-			String type = "";
-			
-			switch (types.getCheckedRadioButtonId()) {
-			case R.id.sit_down:
-				type = "sit_down";
-				break;
-			case R.id.take_out:
-				type = "take_out";
-				break;
-			case R.id.delivery:
-				type = "delivery";
-				break;
-			}
-			
-			helper.insert(name.getText().toString(),
-						address.getText().toString(),
-						type, 
-						notes.getText().toString());
-			restaurantCursor.requery();
-		}
-	};
+
+	@Override
+	public void onListItemClick(ListView list, View view, int position, long id) {
+		Intent i = new Intent(LunchList.this, DetailForm.class);
+		i.putExtra(ID_EXTRA, String.valueOf(id));
+		startActivity(i);
+	}
 
 }
