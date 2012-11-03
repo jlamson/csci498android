@@ -21,4 +21,8 @@
     <string name="row_image_description">An icon displaying the type of restauraunt</string>
     <string name="empty_list_text">Click the menu icon for the option to add a retaurant</string>
     
+    <string name="sort_order_title">Sort Order</string>
+    <string name="sort_order_summary">Choose the order the list uses</string> 
+    <string name="sort_order_dialog">Choose a sort order</string>
+    
 </resources>

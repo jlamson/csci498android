@@ -1,0 +1,19 @@
+
+    <resources>
+        <string-array 
+            name="sort_names">
+            <item >By Name, A-Z</item>
+            <item >By Name, Z-A</item>
+            <item >By Type</item>
+            <item >By Address, Ascending</item>
+            <item >By Address, Descending</item>
+        </string-array>
+        <string-array 
+            name="sort_clauses">
+            <item >name ASC</item>
+            <item >name DESC</item>
+            <item >type</item>
+            <item >address ASC</item>
+            <item >address DESC</item>
+        </string-array>
+    </resources>
