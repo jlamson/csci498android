@@ -12,7 +12,7 @@
             name="sort_clauses">
             <item >name ASC</item>
             <item >name DESC</item>
-            <item >type</item>
+            <item >type, name ASC</item>
             <item >address ASC</item>
             <item >address DESC</item>
         </string-array>
