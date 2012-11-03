@@ -53,6 +53,12 @@ public class DetailForm extends Activity {
         return true;
     }
     
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	helper.close();
+    }
+    
     private View.OnClickListener onSave = new View.OnClickListener() {
 		public void onClick(View v) {
 			
