@@ -28,7 +28,7 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		}
 	}
 	
-	public void insert(String name, String address, String type, String notes) {
+	public void insert(String name, String address, String type, String notes, String feed) {
 		
 		ContentValues cv = new ContentValues();
 		
@@ -36,13 +36,13 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		cv.put("address", address);
 		cv.put("type", type);
 		cv.put("notes", notes);
+		cv.put("feed", feed);
 		
 		getWritableDatabase().insert("restaurants", "name", cv);
-		Log.d("LunchListTag", "Inserted");
 		
 	}
 	
-	public void update(String id, String name, String address, String type, String notes) {
+	public void update(String id, String name, String address, String type, String notes, String feed) {
 		
 		ContentValues cv = new ContentValues();
 		String[] args = {id};
@@ -51,6 +51,7 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		cv.put("address", address);
 		cv.put("type", type);
 		cv.put("notes", notes);
+		cv.put("feed", feed);
 		
 		getWritableDatabase().update("restaurants", cv, "_ID=?", args);
 		
@@ -58,13 +59,13 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 	
 	public Cursor getAll(String orderBy) {
 		return getReadableDatabase().rawQuery(
-					"SELECT _id, name, address, type, notes FROM restaurants ORDER BY " + orderBy,
+					"SELECT _id, name, address, type, notes, feed FROM restaurants ORDER BY " + orderBy,
 					null);
 	}
 	
 	public Cursor getById(String id) {
 		String[] args = {id};
-		String query = "SELECT _id, name, address, type, notes FROM restaurants WHERE _ID=?";
+		String query = "SELECT _id, name, address, type, notes, feed FROM restaurants WHERE _ID=?";
 		return getReadableDatabase().rawQuery(query, args);
 	}
 	
@@ -72,5 +73,6 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 	public String getAddress(Cursor c) 	{ return c.getString(2); }
 	public String getType(Cursor c) 	{ return c.getString(3); }
 	public String getNotes(Cursor c) 	{ return c.getString(4); }
+	public String getFeed(Cursor c) 	{ return c.getString(5); }
 
 }
