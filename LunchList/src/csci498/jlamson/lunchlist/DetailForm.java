@@ -102,11 +102,20 @@ public class DetailForm extends Activity {
 				break;
 			}
 			
-//			helper.insert(name.getText().toString(),
-//						address.getText().toString(),
-//						type, 
-//						notes.getText().toString());
-//			restaurantCursor.requery();
+			if (restaurantId == null) {
+				helper.insert(name.getText().toString(),
+							address.getText().toString(),
+							type, 
+							notes.getText().toString());
+			} else {
+				helper.update( restaurantId,
+						name.getText().toString(),
+						address.getText().toString(),
+						type, 
+						notes.getText().toString());
+			}
+			
+			finish();
 		}
 	};
 

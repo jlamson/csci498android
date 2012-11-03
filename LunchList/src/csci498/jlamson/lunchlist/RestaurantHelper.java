@@ -3,7 +3,9 @@ package csci498.jlamson.lunchlist;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.*;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class RestaurantHelper extends SQLiteOpenHelper {
 
@@ -17,7 +19,6 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL("CREATE TABLE restaurants (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, type TEXT, notes TEXT );");
-		//db.execSQL("DROP restaurants");
 	}
 
 	@Override
@@ -35,6 +36,21 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		cv.put("notes", notes);
 		
 		getWritableDatabase().insert("restaurants", "name", cv);
+		Log.d("LunchListTag", "Inserted");
+		
+	}
+	
+	public void update(String id, String name, String address, String type, String notes) {
+		
+		ContentValues cv = new ContentValues();
+		String[] args = {id};
+		
+		cv.put("name", name);
+		cv.put("address", address);
+		cv.put("type", type);
+		cv.put("notes", notes);
+		
+		getWritableDatabase().update("restaurants", cv, "_ID=?", args);
 		
 	}
 	
