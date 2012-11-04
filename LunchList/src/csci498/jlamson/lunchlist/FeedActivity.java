@@ -50,12 +50,12 @@ public class FeedActivity extends ListActivity {
     	return state;
     }
     
-    private void setFeed(RSSFeed feed) {
+    public void setFeed(RSSFeed feed) {
     	state.feed = feed;
     	setListAdapter(new FeedAdapter(feed));
     }
     
-    private void goBlooey(Throwable t) {
+    public void goBlooey(Throwable t) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	
     	builder
