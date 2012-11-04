@@ -1,10 +1,7 @@
 package csci498.jlamson.lunchlist;
 
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.mcsoxford.rss.RSSFeed;
+import org.mcsoxford.rss.RSSItem;
 import org.mcsoxford.rss.RSSReader;
 
 import android.app.AlertDialog;
@@ -12,7 +9,12 @@ import android.app.ListActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 public class FeedActivity extends ListActivity {
 
@@ -78,4 +80,38 @@ public class FeedActivity extends ListActivity {
     		.setPositiveButton("OK", null)
     		.show();
 	}
+    
+    private class FeedAdapter extends BaseAdapter {
+    	RSSFeed feed = null;
+    	
+    	FeedAdapter(RSSFeed feed) {
+    		super();
+    		this.feed = feed;
+    	}
+    	
+    	public int getCount() {
+    		return feed.getItems().size();
+    	}
+    	
+    	public Object getItem(int position) {
+    		return feed.getItems().get(position);
+    	}
+    	
+    	public long getItemId(int position) {
+    		return position;
+    	}
+    	
+    	public View getView(int position, View convertView, ViewGroup parent) {
+    		View row = convertView;
+    		
+    		if (row == null) {
+    			LayoutInflater inflator = getLayoutInflater();
+    			row = inflator.inflate(android.R.layout.simple_list_item_1, parent, false);
+    		}
+    		
+    		RSSItem item = (RSSItem)getItem(position);
+    		((TextView)row).setText(item.getTitle());
+    		return row;
+    	}
+    }
 }
