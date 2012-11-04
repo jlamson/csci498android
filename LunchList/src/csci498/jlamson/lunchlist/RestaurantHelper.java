@@ -25,6 +25,11 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		if(oldVersion == 1 && newVersion >= 2) {
 			db.execSQL("ALTER TABLE restaurants ADD COLUMN feed TEXT");
 		}
+		
+		if (oldVersion <= 2 && newVersion >= 3) {
+			db.execSQL("ALTER TABLE restaurants ADD COLUMN lat REAL");
+			db.execSQL("ALTER TABLE restaurants ADD COLUMN lon REAL");
+		}
 	}
 	
 	public void insert(String name, String address, String type, String notes, String feed) {
