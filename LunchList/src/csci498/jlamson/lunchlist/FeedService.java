@@ -16,10 +16,12 @@ public class FeedService extends IntentService {
 	public static final String EXTRA_URL = "csci498.jlamson.lunchlist.EXTRA_URL";
 	public static final String EXTRA_MESSENGER = "csci498.jlamson.lunchlist.EXTRA_MESSEN`GER";
 	
+	private InstanceState state;
+	
 	public FeedService() {
 		super("FeedService");
 	}
-
+	
 	@Override
 	protected void onHandleIntent(Intent i) {
 		
@@ -70,6 +72,11 @@ public class FeedService extends IntentService {
 				activity.goBlooey((Exception)msg.obj);
 			}
 		}
+	}
+	
+	private static class InstanceState {
+		RSSFeed feed = null;
+		FeedHandler handler = null;
 	}
 
 }
