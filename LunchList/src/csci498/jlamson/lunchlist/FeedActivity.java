@@ -2,13 +2,15 @@ package csci498.jlamson.lunchlist;
 
 import org.mcsoxford.rss.RSSFeed;
 import org.mcsoxford.rss.RSSItem;
-import org.mcsoxford.rss.RSSReader;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Messenger;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,16 +25,22 @@ public class FeedActivity extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("LunchListTag", "Oncreate: FeedAct");
+        
         state = (InstanceState)getLastNonConfigurationInstance();
-        Log.d("LunchListTag", "getLastNonConfigInst good.");
+        
         if (state == null) {
         	state = new InstanceState();
-        	state.task = new FeedTask(this);
-        	state.task.execute(getIntent().getStringExtra(FEED_URL));
+        	state.handler = new FeedHandler(this);
+        	
+        	Intent i = new Intent(this, FeedService.class);
+        	
+        	i.putExtra(FeedService.EXTRA_URL, getIntent().getStringExtra(FEED_URL));
+        	i.putExtra(FeedService.EXTRA_MESSENGER, new Messenger(state.handler));
+        	
+        	startService(i);
         } else {
-        	if (state.task != null) {
-        		state.task.attach(this);
+        	if (state.handler != null) {
+        		state.handler.attach(this);
         	}
         	
         	if (state.feed != null) {
@@ -43,19 +51,19 @@ public class FeedActivity extends ListActivity {
     
     @Override
     public Object onRetainNonConfigurationInstance() {
-    	if (state.task != null) {
-    		state.task.detach();
+    	if (state.handler != null) {
+    		state.handler.detach();
     	}
     	
     	return state;
     }
     
-    public void setFeed(RSSFeed feed) {
+    private void setFeed(RSSFeed feed) {
     	state.feed = feed;
     	setListAdapter(new FeedAdapter(feed));
     }
     
-    public void goBlooey(Throwable t) {
+    private void goBlooey(Throwable t) {
     	AlertDialog.Builder builder = new AlertDialog.Builder(this);
     	
     	builder
@@ -68,47 +76,6 @@ public class FeedActivity extends ListActivity {
     private static class InstanceState {
     	RSSFeed feed = null;
     	FeedHandler handler = null;
-    }
-    
-    private static class FeedTask extends AsyncTask<String, Void, RSSFeed> {
-    	private RSSReader reader = new RSSReader();
-    	private Exception e;
-    	private FeedActivity activity;
-    	
-    	FeedTask(FeedActivity activity) {
-    		attach(activity);
-    	}
-    	
-    	private void attach(FeedActivity activity) {
-    		this.activity = activity; 
-    	}
-    	 
-    	private void detach() {
-    		this.activity = null;
-    	}
-    	
-		@Override
-		public RSSFeed doInBackground(String... urls) {
-			RSSFeed result = null;
-			
-			try {
-				result = reader.load(urls[0]);
-			} catch (Exception e) {
-				this.e = e;
-			}
-			
-			return result;
-		}
-		
-		@Override
-		public void onPostExecute(RSSFeed feed) {
-			if (e == null) {
-				activity.setFeed(feed);
-			} else {
-				Log.e("LunchList", "Exception parsing feed", e);
-				activity.goBlooey(e);
-			}
-		}
     }
     
     private class FeedAdapter extends BaseAdapter {
@@ -144,5 +111,30 @@ public class FeedActivity extends ListActivity {
     		return row;
     	}
     }
+    
+    private static class FeedHandler extends Handler {
+		FeedActivity activity = null;
+		
+		FeedHandler(FeedActivity activity) {
+			attach(activity);
+		}
+		
+		public void attach(FeedActivity activity) {
+			this.activity = activity;
+		}
+		
+		public void detach() {
+			this.activity = null;
+		}
+		
+		@Override
+		public void handleMessage(Message msg) {
+			if (msg.arg1 == Activity.RESULT_OK) {
+				activity.setFeed((RSSFeed)msg.obj);
+			} else {
+				activity.goBlooey((Exception)msg.obj);
+			}
+		}
+	}
     
 }
