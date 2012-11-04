@@ -15,9 +15,7 @@ public class FeedService extends IntentService {
 
 	public static final String EXTRA_URL = "csci498.jlamson.lunchlist.EXTRA_URL";
 	public static final String EXTRA_MESSENGER = "csci498.jlamson.lunchlist.EXTRA_MESSEN`GER";
-	
-	private InstanceState state;
-	
+
 	public FeedService() {
 		super("FeedService");
 	}
@@ -74,9 +72,4 @@ public class FeedService extends IntentService {
 		}
 	}
 	
-	private static class InstanceState {
-		RSSFeed feed = null;
-		FeedHandler handler = null;
-	}
-
 }

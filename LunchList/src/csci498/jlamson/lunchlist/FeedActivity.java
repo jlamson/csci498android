@@ -67,7 +67,7 @@ public class FeedActivity extends ListActivity {
     
     private static class InstanceState {
     	RSSFeed feed = null;
-    	FeedTask task = null;
+    	FeedHandler handler = null;
     }
     
     private static class FeedTask extends AsyncTask<String, Void, RSSFeed> {
