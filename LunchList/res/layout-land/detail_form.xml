@@ -6,28 +6,29 @@
 	<TableLayout 
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:stretchColumns="3" 
-	    android:shrinkColumns="3" >
+	    android:stretchColumns="2" 
+	    android:shrinkColumns="2" >
 	    <TableRow>
 	        <TextView android:text="@string/name_label" />
 	        <EditText
 	            android:inputType="text"
 	            android:id="@+id/name"
-	            android:layout_span="3" />
+	            android:layout_span="2" />
 	    </TableRow>
 		<TableRow>
 	        <TextView android:text="@string/address_label" />
 	        <AutoCompleteTextView
 	            android:inputType="text"
 	            android:id="@+id/addr"
-	            android:layout_span="3" />
+	            android:layout_span="2" />
 	    </TableRow>
 	    <TableRow>
 	        <TextView android:text="@string/radio_group_label_type" />
 	        <RadioGroup android:id="@+id/types" >
 	            <RadioButton 
 	                android:id="@+id/sit_down"
-	                android:text="@string/radio_button_label_sitdown" />
+	                android:text="@string/radio_button_label_sitdown"
+	               	android:checked="true" />
 	            <RadioButton 
 	                android:id="@+id/take_out"
 	                android:text="@string/radio_button_label_takeout" />
@@ -36,18 +37,21 @@
 	                android:text="@string/radio_button_label_delivery" />
 	        </RadioGroup>
 	    </TableRow>
-	    <TableRow>
-	        <TextView android:text="@string/notes_label" />
-	        <EditText 
-	            android:id="@+id/notes"
-	            android:hint="@string/notes_hint"
-	            android:inputType="textMultiLine"
-	            android:gravity="top"
-	            android:lines="2"
-	            android:scrollHorizontally="false"
-	            android:maxLines="2" 
-	            android:layout_width="match_parent"/>
-	    </TableRow>
+        <EditText 
+            android:id="@+id/notes"
+            android:hint="@string/notes_hint"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:lines="2"
+            android:scrollHorizontally="false"
+            android:maxLines="2" 
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/feed_hint" />
 	    <Button
 	        android:id="@+id/save"
 	        android:layout_width="match_parent"
