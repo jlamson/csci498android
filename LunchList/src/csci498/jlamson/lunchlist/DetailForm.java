@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,10 +90,11 @@ public class DetailForm extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	
+    	Log.d("LunchListTag", "onOptionsItemSelected");
     	if (item.getItemId() == R.id.feed) {
     		
     		if (isNetworkAvailable()) {
+    			Log.d("LunchListTag", "Network available");
     			Intent i = new Intent(this, FeedActivity.class);
     			i.putExtra(FeedActivity.FEED_URL, feed.getText().toString());
     			startActivity(i);

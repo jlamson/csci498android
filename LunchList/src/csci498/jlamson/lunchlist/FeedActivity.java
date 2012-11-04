@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,16 +17,57 @@ import android.widget.TextView;
 
 public class FeedActivity extends ListActivity {
 
+	public static final String FEED_URL = "csci498.jlamson.lunchlist.FEED_URL";
+	private InstanceState state = null;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.feed);
+        Log.d("LunchListTag", "Oncreate: FeedAct");
+        state = (InstanceState)getLastNonConfigurationInstance();
+        Log.d("LunchListTag", "getLastNonConfigInst good.");
+        if (state == null) {
+        	state = new InstanceState();
+        	state.task = new FeedTask(this);
+        	state.task.execute(getIntent().getStringExtra(FEED_URL));
+        } else {
+        	if (state.task != null) {
+        		state.task.attach(this);
+        	}
+        	
+        	if (state.feed != null) {
+        		setFeed(state.feed);
+        	}
+        }
     }
-
+    
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.feed, menu);
-        return true;
+    public Object onRetainNonConfigurationInstance() {
+    	if (state.task != null) {
+    		state.task.detach();
+    	}
+    	
+    	return state;
+    }
+    
+    private void setFeed(RSSFeed feed) {
+    	state.feed = feed;
+    	setListAdapter(new FeedAdapter(feed));
+    }
+    
+    private void goBlooey(Throwable t) {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	
+    	builder
+    		.setTitle("Exception!")
+    		.setMessage(t.toString())
+    		.setPositiveButton("OK", null)
+    		.show();
+	}
+    
+    private static class InstanceState {
+    	RSSFeed feed = null;
+    	FeedTask task = null;
     }
     
     private static class FeedTask extends AsyncTask<String, Void, RSSFeed> {
@@ -42,7 +82,7 @@ public class FeedActivity extends ListActivity {
     	private void attach(FeedActivity activity) {
     		this.activity = activity; 
     	}
-    	
+    	 
     	private void detach() {
     		this.activity = null;
     	}
@@ -70,16 +110,6 @@ public class FeedActivity extends ListActivity {
 			}
 		}
     }
-    
-    private void goBlooey(Throwable t) {
-    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    	
-    	builder
-    		.setTitle("Exception!")
-    		.setMessage(t.toString())
-    		.setPositiveButton("OK", null)
-    		.show();
-	}
     
     private class FeedAdapter extends BaseAdapter {
     	RSSFeed feed = null;
@@ -114,4 +144,5 @@ public class FeedActivity extends ListActivity {
     		return row;
     	}
     }
+    
 }
