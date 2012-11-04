@@ -24,19 +24,13 @@
             android:label="@string/title_activity_lunch_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name=".DetailForm" >
-        </activity>
-        <activity 
-            android:name=".EditPreferences" >
-        </activity>
-        <activity
-            android:name=".FeedActivity" >
-        </activity>
+        <activity android:name=".DetailForm" ></activity>
+        <activity android:name=".EditPreferences" ></activity>
+        <activity android:name=".FeedActivity" ></activity>
+        <service android:name=".FeedService" ></service>
     </application>
 
 </manifest>
