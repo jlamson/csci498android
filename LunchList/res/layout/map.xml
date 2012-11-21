@@ -4,5 +4,5 @@
   android:id="@+id/map"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:apiKey="00yHj0k7_7vxbuQ9zwyXI4bNMJrAjYrJ9KKHgbQ"
+  android:apiKey="01jXlfJfenqkrHHWTIv6i6Ua8S3zfVgk_YuYfiQ"
   android:clickable="true" />
