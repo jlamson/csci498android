@@ -1,4 +1,4 @@
-package apt.tutorial;
+package jlamson.csci498.lunchlist;
 
 import android.content.Context;
 import android.content.res.TypedArray;
