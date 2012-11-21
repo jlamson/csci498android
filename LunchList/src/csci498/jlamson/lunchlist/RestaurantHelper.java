@@ -17,7 +17,7 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL("CREATE TABLE restaurants (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, type TEXT, notes TEXT, feed TEXT);");
+		db.execSQL("CREATE TABLE restaurants (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, address TEXT, type TEXT, notes TEXT, feed TEXT, lat REAL, lon REAL);");
 	}
 
 	@Override
@@ -42,6 +42,8 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 		cv.put("notes", notes);
 		cv.put("feed", feed);
 		
+		
+		
 		getWritableDatabase().insert("restaurants", "name", cv);
 		
 	}
@@ -63,14 +65,24 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 	
 	public Cursor getAll(String orderBy) {
 		return getReadableDatabase().rawQuery(
-					"SELECT _id, name, address, type, notes, feed FROM restaurants ORDER BY " + orderBy,
+					"SELECT _id, name, address, type, notes, feed, lat, lon FROM restaurants ORDER BY " + orderBy,
 					null);
 	}
 	
 	public Cursor getById(String id) {
 		String[] args = {id};
-		String query = "SELECT _id, name, address, type, notes, feed FROM restaurants WHERE _ID=?";
+		String query = "SELECT _id, name, address, type, notes, feed, lat, lon FROM restaurants WHERE _ID=?";
 		return getReadableDatabase().rawQuery(query, args);
+	}
+	
+	public void updateLocation(String id, double lat, double lon) {
+		ContentValues cv = new ContentValues();
+		String[] args = {id};
+		
+		cv.put("lat", lat);
+		cv.put("lon", lon);
+		
+		getWritableDatabase().update("restaurants", cv, "_ID=?", args);
 	}
 	
 	public String getName(Cursor c) 	{ return c.getString(1); }
@@ -78,5 +90,7 @@ public class RestaurantHelper extends SQLiteOpenHelper {
 	public String getType(Cursor c) 	{ return c.getString(3); }
 	public String getNotes(Cursor c) 	{ return c.getString(4); }
 	public String getFeed(Cursor c) 	{ return c.getString(5); }
-
+	public String getLat(Cursor c)		{ return c.getString(6); }
+	public String getLon(Cursor c)		{ return c.getString(6); }
+	
 }
