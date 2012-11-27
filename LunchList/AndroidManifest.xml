@@ -36,7 +36,8 @@
         <activity android:name=".AlarmActivity" />
 
         <service android:name=".FeedService" />
-
+		<service android:name=".WidgetService" />
+		
         <receiver
             android:name=".OnBootReceiver"
             android:enabled="false" >
@@ -45,6 +46,16 @@
             </intent-filter>
         </receiver>
         <receiver android:name=".OnAlarmReceiver" />
+        <receiver 
+            android:name=".AppWidget"
+            android:label="@string/app_name"
+            android:icon="@drawable/icon" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data 
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
     </application>
-
 </manifest>
