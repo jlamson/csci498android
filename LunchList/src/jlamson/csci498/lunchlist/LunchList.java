@@ -3,6 +3,8 @@ package jlamson.csci498.lunchlist;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 public class LunchList extends FragmentActivity 
 		implements LunchFragment.OnRestaurantListener {
@@ -26,7 +28,23 @@ public class LunchList extends FragmentActivity
 			i.putExtra(ID_EXTRA, String.valueOf(id));
 			startActivity(i);
 		} else {
-			//TODO: do sterf.
+			FragmentManager fragmentManager = getSupportFragmentManager();
+			DetailFragment details = (DetailFragment)fragmentManager
+					.findFragmentById(R.id.details);
+			
+			if (details == null) {
+				details = DetailFragment.newInstance(id);
+				
+				FragmentTransaction xaction = fragmentManager.beginTransaction();
+				xaction
+					.add(R.id.details, details)
+					.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+					.addToBackStack(null)
+					.commit();
+			
+			} else {
+				details.loadRestaurant(String.valueOf(id));
+			}
 		}
 	}
 

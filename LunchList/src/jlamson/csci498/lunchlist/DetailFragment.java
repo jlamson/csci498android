@@ -74,7 +74,7 @@ public class DetailFragment extends android.support.v4.app.Fragment {
 			helper = new RestaurantHelper(getActivity());
 		}
 		
-		return getHelper();
+		return helper;
 	}
 
 	@Override
