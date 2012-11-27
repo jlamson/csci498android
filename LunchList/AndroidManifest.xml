@@ -36,7 +36,8 @@
         <activity android:name=".AlarmActivity" />
 
         <service android:name=".FeedService" />
-
+		<service android:name=".WidgetService" />
+		
         <receiver
             android:name=".OnBootReceiver"
             android:enabled="false" >
