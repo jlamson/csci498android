@@ -1,5 +1,6 @@
 package jlamson.csci498.lunchlist;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -20,7 +21,7 @@ public class AppWidget extends AppWidgetProvider {
 		}
 	}
 
-	private void onHCUpdate(Context ctx, AppWidgetManager mgr, int[] appWidgetIds) {
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB) private void onHCUpdate(Context ctx, AppWidgetManager mgr, int[] appWidgetIds) {
 		
 		for (int i=0; i < appWidgetIds.length; i++) {
 			Intent serviceIntent = new Intent(ctx, ListWidgetService.class);
@@ -32,7 +33,7 @@ public class AppWidget extends AppWidgetProvider {
 			widget.setRemoteAdapter(appWidgetIds[i], R.id.restaurants, serviceIntent);
 			
 			Intent clickIntent = new Intent(ctx, DetailForm.class);
-			PendingIntent pi = PendingIntent.getActivity(context, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pi = PendingIntent.getActivity(ctx, 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			widget.setPendingIntentTemplate(R.id.restaurants, pi);
 			
 			mgr.updateAppWidget(appWidgetIds[i], widget);
