@@ -8,6 +8,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 public class EditPreferences extends PreferenceActivity {
+
 	SharedPreferences prefs = null;
 
 	@Override
@@ -36,6 +37,7 @@ public class EditPreferences extends PreferenceActivity {
 		public void onSharedPreferenceChanged(SharedPreferences prefs,
 				String key) {
 			if ("alarm".equals(key)) {
+				
 				boolean enabled = prefs.getBoolean(key, false);
 				int flag = (enabled ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
 						: PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
@@ -50,10 +52,12 @@ public class EditPreferences extends PreferenceActivity {
 				} else {
 					OnBootReceiver.cancelAlarm(EditPreferences.this);
 				}
+				
 			} else if ("alarm_time".equals(key)) {
 				OnBootReceiver.cancelAlarm(EditPreferences.this);
 				OnBootReceiver.setAlarm(EditPreferences.this);
 			}
 		}
 	};
+
 }

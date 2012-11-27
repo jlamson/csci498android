@@ -9,7 +9,8 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB) public class ListViewsFactory implements RemoteViewsFactory {
+@TargetApi(Build.VERSION_CODES.HONEYCOMB) 
+public class ListViewsFactory implements RemoteViewsFactory {
 
 	private Context ctx;
 	private RestaurantHelper helper;
@@ -43,6 +44,7 @@ import android.widget.RemoteViewsService.RemoteViewsFactory;
 	}
 
 	public RemoteViews getViewAt(int position) {
+		
 		RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.widget_row);
 		restaurants.moveToPosition(position);
 		
@@ -57,6 +59,7 @@ import android.widget.RemoteViewsService.RemoteViewsFactory;
 		row.setOnClickFillInIntent(android.R.id.text1, i);
 		
 		return row;
+	
 	}
 
 	public int getViewTypeCount() {

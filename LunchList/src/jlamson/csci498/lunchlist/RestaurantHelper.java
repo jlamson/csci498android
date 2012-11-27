@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 class RestaurantHelper extends SQLiteOpenHelper {
+	
 	private static final String DATABASE_NAME = "lunchlist.db";
 	private static final int SCHEMA_VERSION = 3;
 
@@ -32,9 +33,9 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	}
 
 	public Cursor getAll(String orderBy) {
-		return (getReadableDatabase().rawQuery(
+		return getReadableDatabase().rawQuery(
 				"SELECT _id, name, address, type, notes, lat, lon FROM restaurants ORDER BY "
-						+ orderBy, null));
+						+ orderBy, null);
 	}
 	
 	public Cursor getAllIdsAndNames() {
@@ -44,14 +45,14 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	public Cursor getById(String id) {
 		String[] args = { id };
 
-		return (getReadableDatabase()
-				.rawQuery(
+		return getReadableDatabase().rawQuery(
 						"SELECT _id, name, address, type, notes, feed, lat, lon FROM restaurants WHERE _ID=?",
-						args));
+						args);
 	}
 
-	public void insert(String name, String address, String type, String notes,
+	public void insert(String name, String address, String type, String notes, 
 			String feed) {
+		
 		ContentValues cv = new ContentValues();
 
 		cv.put("name", name);
@@ -65,6 +66,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 
 	public void update(String id, String name, String address, String type,
 			String notes, String feed) {
+		
 		ContentValues cv = new ContentValues();
 		String[] args = { id };
 
@@ -87,33 +89,13 @@ class RestaurantHelper extends SQLiteOpenHelper {
 		getWritableDatabase().update("restaurants", cv, "_ID=?", args);
 	}
 
-	public String getName(Cursor c) {
-		return (c.getString(1));
-	}
-
-	public String getAddress(Cursor c) {
-		return (c.getString(2));
-	}
-
-	public String getType(Cursor c) {
-		return (c.getString(3));
-	}
-
-	public String getNotes(Cursor c) {
-		return (c.getString(4));
-	}
-
-	public String getFeed(Cursor c) {
-		return (c.getString(5));
-	}
-
-	public double getLatitude(Cursor c) {
-		return (c.getDouble(6));
-	}
-
-	public double getLongitude(Cursor c) {
-		return (c.getDouble(7));
-	}
+	public String getName(Cursor c) {		return c.getString(1);	}
+	public String getAddress(Cursor c) {	return c.getString(2);	}
+	public String getType(Cursor c) {		return c.getString(3);	}
+	public String getNotes(Cursor c) {		return c.getString(4); }
+	public String getFeed(Cursor c) {		return c.getString(5); }
+	public double getLatitude(Cursor c) {	return c.getDouble(6); }
+	public double getLongitude(Cursor c) {	return c.getDouble(7); }
 
 	public int getCountRestaurants() {
 		Cursor c = getReadableDatabase().rawQuery("SELECT COUNT(*) FROM restaurants", null);
@@ -122,11 +104,14 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	}
 
 	public Cursor getRandomRestautant(int seed) {
+		
 		int offset = (int)(seed * Math.random());
 		String args[] = {String.valueOf(offset)};
-		Cursor c = getReadableDatabase()
-				.rawQuery("SELECT _ID,  name FROM restaurants LIMIT 1 OFFSET ?", args);
+		Cursor c = getReadableDatabase().rawQuery(
+				"SELECT _ID,  name FROM restaurants LIMIT 1 OFFSET ?", args);
 		c.moveToFirst();
 		return c;
+	
 	}
+
 }

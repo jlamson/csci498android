@@ -10,13 +10,16 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
 public class RestaurantMap extends MapActivity {
+	
 	public static final String EXTRA_LATITUDE = "jlamson.csci498.lunchlist.EXTRA_LATITUDE";
 	public static final String EXTRA_LONGITUDE = "jlamson.csci498.lunchlist.EXTRA_LONGITUDE";
 	public static final String EXTRA_NAME = "jlamson.csci498.lunchlist.EXTRA_NAME";
+	
 	private MapView map = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 
@@ -41,14 +44,16 @@ public class RestaurantMap extends MapActivity {
 		map.getOverlays().add(
 				new RestaurantOverlay(marker, status, getIntent()
 						.getStringExtra(EXTRA_NAME)));
+	
 	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		return (false);
+		return false;
 	}
 
 	private class RestaurantOverlay extends ItemizedOverlay<OverlayItem> {
+		
 		private OverlayItem item = null;
 
 		public RestaurantOverlay(Drawable marker, GeoPoint point, String name) {
@@ -71,12 +76,14 @@ public class RestaurantMap extends MapActivity {
 			Toast.makeText(RestaurantMap.this, item.getSnippet(),
 					Toast.LENGTH_SHORT).show();
 
-			return (true);
+			return true;
 		}
 
 		@Override
 		public int size() {
-			return (1);
+			return 1;
 		}
+		
 	}
+
 }

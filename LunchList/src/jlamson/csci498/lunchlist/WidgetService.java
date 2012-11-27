@@ -18,7 +18,8 @@ public class WidgetService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		
 		ComponentName me = new ComponentName(this, AppWidget.class);
-		RemoteViews updateViews = new RemoteViews("jlamson.csci498.lunchlist", R.layout.widget);
+		RemoteViews updateViews = new RemoteViews("jlamson.csci498.lunchlist",
+				R.layout.widget);
 		RestaurantHelper helper = new RestaurantHelper(this);
 		AppWidgetManager manager = AppWidgetManager.getInstance(this);
 		
@@ -26,6 +27,7 @@ public class WidgetService extends IntentService {
 			int count = helper.getCountRestaurants();
 			
 			if (count > 0) {
+			
 				Cursor c = helper.getRandomRestautant(count);
 				
 				updateViews.setTextViewText(R.id.name, c.getString(1));
@@ -35,6 +37,7 @@ public class WidgetService extends IntentService {
 				
 				PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 				updateViews.setOnClickPendingIntent(R.id.name, pi);
+			
 			} else {
 				updateViews.setTextViewText(R.id.name, this.getString(R.string.empty));
 			}
