@@ -112,7 +112,7 @@ class RestaurantHelper extends SQLiteOpenHelper {
 	}
 
 	public int getCountRestaurants() {
-		Cursor c = getReadableDatabase().rawQuery("SELECT COUNT(*) FROM retaurants", null);
+		Cursor c = getReadableDatabase().rawQuery("SELECT COUNT(*) FROM restaurants", null);
 		c.moveToFirst();
 		return c.getInt(0);	
 	}
