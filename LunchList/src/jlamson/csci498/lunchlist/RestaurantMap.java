@@ -3,11 +3,16 @@ package jlamson.csci498.lunchlist;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Toast;
+import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
+import com.google.android.maps.OverlayItem;
 
 public class RestaurantMap extends MapActivity {
-	public static final String EXTRA_LATITUDE = "apt.tutorial.EXTRA_LATITUDE";
-	public static final String EXTRA_LONGITUDE = "apt.tutorial.EXTRA_LONGITUDE";
-	public static final String EXTRA_NAME = "apt.tutorial.EXTRA_NAME";
+	public static final String EXTRA_LATITUDE = "jlamson.csci498.lunchlist.EXTRA_LATITUDE";
+	public static final String EXTRA_LONGITUDE = "jlamson.csci498.lunchlist.EXTRA_LONGITUDE";
+	public static final String EXTRA_NAME = "jlamson.csci498.lunchlist.EXTRA_NAME";
 	private MapView map = null;
 
 	@Override
