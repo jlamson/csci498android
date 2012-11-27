@@ -26,9 +26,7 @@ public class WidgetService extends IntentService {
 			int count = helper.getCountRestaurants();
 			
 			if (count > 0) {
-				int offset = (int)(count * Math.random());
-				String args[] = {String.valueOf(offset)};
-				Cursor c = helper.getRestaurantWithOffset(args);
+				Cursor c = helper.getRandomRestautant(count);
 				
 				updateViews.setTextViewText(R.id.name, c.getString(1));
 				
