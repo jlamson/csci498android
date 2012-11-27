@@ -112,7 +112,9 @@ public class DetailFragment extends android.support.v4.app.Fragment {
 
 				i.putExtra(FeedActivity.FEED_URL, feed.getText().toString());
 				startActivity(i);
-			} else {
+			} else if (item.getItemId() == R.id.help) {
+				startActivity(new Intent(getActivity(), HelpPage.class));
+			}else {
 				Toast.makeText(getActivity(), "Sorry, the Internet is not available",
 						Toast.LENGTH_LONG).show();
 			}
