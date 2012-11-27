@@ -1,53 +1,70 @@
 package jlamson.csci498.lunchlist;
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService.RemoteViewsFactory;
 
 public class ListViewsFactory implements RemoteViewsFactory {
 
+	private Context ctx;
+	private RestaurantHelper helper;
+	private Cursor restaurants;
+	
+	public ListViewsFactory(Context ctx, Intent intent) {
+		this.ctx = ctx;
+	}
+	
+	public void onCreate() {
+		helper = new RestaurantHelper(ctx);
+		restaurants = helper.getAllIdsAndNames();
+	}
+	
+	public void onDestroy() {
+		restaurants.close();
+		helper.close();
+	}
+	
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return restaurants.getCount();
 	}
 
-	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
-		return 0;
+	public long getItemId(int position) {
+		restaurants.moveToPosition(position);
+		return restaurants.getInt(0);
 	}
 
 	public RemoteViews getLoadingView() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public RemoteViews getViewAt(int position) {
-		// TODO Auto-generated method stub
-		return null;
+		RemoteViews row = new RemoteViews(ctx.getPackageName(), R.layout.widget_row);
+		restaurants.moveToPosition(position);
+		
+		row.setTextViewText(android.R.id.text1, restaurants.getString(1));
+		
+		Intent i = new Intent();
+		Bundle extras = new Bundle();
+		
+		extras.putString(LunchList.ID_EXTRA, String.valueOf(restaurants.getInt(0)));
+		i.putExtras(extras);
+		
+		row.setOnClickFillInIntent(android.R.id.text1, i);
 	}
 
 	public int getViewTypeCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public void onCreate() {
-		// TODO Auto-generated method stub
-
+		return true;
 	}
 
 	public void onDataSetChanged() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-
+		//do nothing
 	}
 
 }
