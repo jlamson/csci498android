@@ -1,4 +1,4 @@
-package csci498.jlamson.lunchlist;
+package jlamson.csci498.lunchlist;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -19,91 +19,102 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class LunchList extends ListActivity {
-
-	public final static String ID_EXTRA = "csci498.jlamson.lunchlist._ID";
-
-	Cursor modelCursor;
-	RestaurantAdapter restaurantAdapter = null;
-
-	RestaurantHelper helper;
-
-	private SharedPreferences preference;
+	public final static String ID_EXTRA = "apt.tutorial._ID";
+	Cursor model = null;
+	RestaurantAdapter adapter = null;
+	RestaurantHelper helper = null;
+	SharedPreferences prefs = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		initDatabaseAccess();
-		initPreference();
-		initRestaurantListView();
-		
-	}
-
-	private void initDatabaseAccess() {
 		helper = new RestaurantHelper(this);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		initList();
+		prefs.registerOnSharedPreferenceChangeListener(prefListener);
 	}
 
-	private void initPreference() {
-		preference = PreferenceManager.getDefaultSharedPreferences(this);
-		preference.registerOnSharedPreferenceChangeListener(prefListener);
-	}
-	
-	private void initRestaurantListView() {
-		if (modelCursor != null) {
-			stopManagingCursor(modelCursor);
-			modelCursor.close();
-		}
-		
-		modelCursor = helper.getAll(preference.getString("sort_order", "name"));
-		startManagingCursor(modelCursor);
-		restaurantAdapter = new RestaurantAdapter(modelCursor);
-		setListAdapter(restaurantAdapter);
-	}
-
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
+
 		helper.close();
+	}
+
+	@Override
+	public void onListItemClick(ListView list, View view, int position, long id) {
+		Intent i = new Intent(LunchList.this, DetailForm.class);
+
+		i.putExtra(ID_EXTRA, String.valueOf(id));
+		startActivity(i);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		new MenuInflater(this).inflate(R.menu.option, menu);
-		return super.onCreateOptionsMenu(menu);
+
+		return (super.onCreateOptionsMenu(menu));
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.add) {
 			startActivity(new Intent(LunchList.this, DetailForm.class));
-			return true;
+
+			return (true);
 		} else if (item.getItemId() == R.id.prefs) {
-			startActivity(new Intent(LunchList.this, EditPreferences.class));
-			return true;
+			startActivity(new Intent(this, EditPreferences.class));
+
+			return (true);
 		}
-		return super.onOptionsItemSelected(item);
+
+		return (super.onOptionsItemSelected(item));
 	}
 
+	private void initList() {
+		if (model != null) {
+			stopManagingCursor(model);
+			model.close();
+		}
+
+		model = helper.getAll(prefs.getString("sort_order", "name"));
+		startManagingCursor(model);
+		adapter = new RestaurantAdapter(model);
+		setListAdapter(adapter);
+	}
+
+	private SharedPreferences.OnSharedPreferenceChangeListener prefListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+		public void onSharedPreferenceChanged(SharedPreferences sharedPrefs,
+				String key) {
+			if (key.equals("sort_order")) {
+				initList();
+			}
+		}
+	};
+
 	class RestaurantAdapter extends CursorAdapter {
-		public RestaurantAdapter(Cursor c) {
+		RestaurantAdapter(Cursor c) {
 			super(LunchList.this, c);
 		}
 
 		@Override
-		public void bindView(View row, Context context, Cursor c) {
+		public void bindView(View row, Context ctxt, Cursor c) {
 			RestaurantHolder holder = (RestaurantHolder) row.getTag();
+
 			holder.populateFrom(c, helper);
 		}
 
 		@Override
-		public View newView(Context context, Cursor c, ViewGroup parent) {
-			LayoutInflater inflator = getLayoutInflater();
-			View row = inflator.inflate(R.layout.row, parent, false);
+		public View newView(Context ctxt, Cursor c, ViewGroup parent) {
+			LayoutInflater inflater = getLayoutInflater();
+			View row = inflater.inflate(R.layout.row, parent, false);
 			RestaurantHolder holder = new RestaurantHolder(row);
+
 			row.setTag(holder);
 
-			return row;
+			return (row);
 		}
 	}
 
@@ -112,13 +123,13 @@ public class LunchList extends ListActivity {
 		private TextView address = null;
 		private ImageView icon = null;
 
-		public RestaurantHolder(View row) {
+		RestaurantHolder(View row) {
 			name = (TextView) row.findViewById(R.id.title);
 			address = (TextView) row.findViewById(R.id.address);
 			icon = (ImageView) row.findViewById(R.id.icon);
 		}
 
-		public void populateFrom(Cursor c, RestaurantHelper helper) {
+		void populateFrom(Cursor c, RestaurantHelper helper) {
 			name.setText(helper.getName(c));
 			address.setText(helper.getAddress(c));
 
@@ -131,20 +142,4 @@ public class LunchList extends ListActivity {
 			}
 		}
 	}
-
-	@Override
-	public void onListItemClick(ListView list, View view, int position, long id) {
-		Intent i = new Intent(LunchList.this, DetailForm.class);
-		i.putExtra(ID_EXTRA, String.valueOf(id));
-		startActivity(i);
-	}
-	
-	private SharedPreferences.OnSharedPreferenceChangeListener prefListener = 
-		new SharedPreferences.OnSharedPreferenceChangeListener() {
-			public void onSharedPreferenceChanged(SharedPreferences sharedPrefs, String key) {
-				if (key.equals("sort_order")) {
-					initRestaurantListView();
-				}
-			}
-		};
 }
